@@ -12,7 +12,7 @@ NUM_DAMAS		= 8
 PRO_RECOMB		= 0.9
 PRO_MUTACAO		= 0.9
 
-TAM_POPULACAO	= 20
+TAM_POPULACAO	= 50
 
 MIN_FITNESS		= 1
 MAX_AVALIACOES	= 500
@@ -42,9 +42,9 @@ SELECTED_CROSSOVER			= RING_CROSSOVER
 
 def generateSpace():
 
-	ofile  = open('space.csv', "w")
+	ofile  = open('space.csv', "w", newline='')
 	writer = csv.writer(ofile)
-	writer.writerow('config,fitness')
+	writer.writerow(['config','fitness'])
 	populacao = generatePopulation(40320, True)
 	for i in populacao:
 		writer.writerow((str(i), str(fitness(i))))
@@ -661,7 +661,7 @@ def avaliation(num_testes):
 		itr_converg = []
 		qtd_convergidos = []
 		fitness_med = []
-		ofile  = open('teste'+str(i)+'.csv', "w")
+		ofile  = open('teste'+str(i)+'.csv', "w", newline='')
 		writer = csv.writer(ofile)
 		writer.writerow(['individuo,fitness'])
 		print("Teste " + str(i + 1))
@@ -675,7 +675,7 @@ def avaliation(num_testes):
 		fitness_med.append(fit_medio)
 		ofile.close()
 
-		ofile  = open('info'+str(i)+'.csv', "w")
+		ofile  = open('info'+str(i)+'.csv', "w", newline='')
 		writer = csv.writer(ofile)
 		writer.writerow(('dado','valor'))
 		writer.writerow(('populacao', TAM_POPULACAO))
@@ -694,6 +694,7 @@ def avaliation(num_testes):
 
 
 # endDef
+
 
 
 
