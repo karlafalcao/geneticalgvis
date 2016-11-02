@@ -78,6 +78,15 @@ def binaryStringPermutation(tam_lista):
 
 def fitness(individuo):
 
+	fit = 1/(1 + colisionsNumber(individuo))
+
+	return fit
+
+# endDef
+
+
+def fitnesslog(individuo):
+
 	fit = float(1)/(1 + colisionsNumber(individuo))
 
 	return fit
@@ -689,7 +698,7 @@ def main(depuracao = True, writer = object):
 		populacao = survivorSelection(populacao, filhos)
 
 		for (i, individuo) in enumerate(populacao):
-			writer.writerow([str(i) + ',' + str(fitness(individuo))])
+			writer.writerow([str(i) + ',' + str(fitnesslog(individuo))])
 		
 		num_avaliacoes += len(filhos)
 
