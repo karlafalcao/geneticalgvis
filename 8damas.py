@@ -40,6 +40,18 @@ SELECTED_CROSSOVER			= RING_CROSSOVER
 
 # ================= GERACAO DA POPULACAO =================
 
+def generateSpace():
+
+	ofile  = open('space.csv', "w")
+	writer = csv.writer(ofile)
+	writer.writerow(('config','fitness'))
+	populacao = generatePopulation(40320, True)
+	for i in populacao:
+		writer.writerow((i,fitness(i)))
+	ofile.close()
+# endDef
+
+
 def generatePopulation(tamanho, ordenar = False):
 
 	populacao = permutation(tamanho)
@@ -100,7 +112,7 @@ def colisionsNumber(config):
 	for i in range(NUM_DAMAS):
 		for j in range(i + 1, NUM_DAMAS):
 
-			if abs(config[i] - config[j]) == j-i:
+			if abs(config[i] - config[j]) == j - i:
 				colisoes += 1
 			elif abs(config[i] - config[j]) == 0:
 				colisoes += 10
