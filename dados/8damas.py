@@ -44,10 +44,10 @@ def generateSpace():
 
 	ofile  = open('space.csv', "w")
 	writer = csv.writer(ofile)
-	writer.writerow(('config','fitness'))
+	writer.writerow('config,fitness')
 	populacao = generatePopulation(40320, True)
 	for i in populacao:
-		writer.writerow((i,fitness(i)))
+		writer.writerow((str(i), str(fitness(i))))
 	ofile.close()
 # endDef
 
@@ -655,12 +655,12 @@ def show(populacao, ger):
 
 def avaliation(num_testes):
 
-	convergencias = 0
-	itr_converg = []
-	qtd_convergidos = []
-	fitness_med = []
 	
 	for i in range(num_testes):
+		convergencias = 0
+		itr_converg = []
+		qtd_convergidos = []
+		fitness_med = []
 		ofile  = open('teste'+str(i)+'.csv', "w")
 		writer = csv.writer(ofile)
 		writer.writerow(['individuo,fitness'])
@@ -675,15 +675,23 @@ def avaliation(num_testes):
 		fitness_med.append(fit_medio)
 		ofile.close()
 
+		ofile  = open('info'+str(i)+'.csv', "w")
+		writer = csv.writer(ofile)
+		writer.writerow(('dado','valor'))
+		writer.writerow(('populacao', TAM_POPULACAO))
+		writer.writerow(('total_converg', total_converg))
+		writer.writerow(('it_converg', it_converg))
+		#writer.writerow(('mdconvergidos', statistics.mean(qtd_convergidos)))
+		writer.writerow(('fitmedio', fit_medio))
+
+		#print("DESVIO PADRAO DAS ITERACOES:      " + str(statistics.stdev(itr_converg)))
+		#print("MEDIA DE CONVERGIDOS POR TESTE:   " + str(statistics.mean(qtd_convergidos)))
+		#print("DESVIO PADRAO DOS CONVERGIDOS:    " + str(statistics.stdev(qtd_convergidos)))
+		#print("MEDIA DO FITNESS MEDIO POR TESTE: " + str(statistics.mean(fitness_med)))
+		#print("DESVIO PADRAO DO FITNESS MEDIO:   " + str(statistics.stdev(fitness_med)))
+
 	# endFor
 
-	print("TOTAL DE CONVERGENCIAS:           " + str(convergencias))
-	print("ITERACAO MEDIA DE CONVERGENCIA:   " + str(statistics.mean(itr_converg)))
-	print("DESVIO PADRAO DAS ITERACOES:      " + str(statistics.stdev(itr_converg)))
-	print("MEDIA DE CONVERGIDOS POR TESTE:   " + str(statistics.mean(qtd_convergidos)))
-	print("DESVIO PADRAO DOS CONVERGIDOS:    " + str(statistics.stdev(qtd_convergidos)))
-	print("MEDIA DO FITNESS MEDIO POR TESTE: " + str(statistics.mean(fitness_med)))
-	print("DESVIO PADRAO DO FITNESS MEDIO:   " + str(statistics.stdev(fitness_med)))
 
 # endDef
 
