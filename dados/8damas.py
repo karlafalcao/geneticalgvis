@@ -47,7 +47,7 @@ def generateSpace():
 	writer.writerow(['config','fitness'])
 	populacao = generatePopulation(40320, True)
 	for i in populacao:
-		writer.writerow((str(i), str(fitness(i))))
+		writer.writerow((str(i), ("%.3f" % fitnesslog(i))))
 	ofile.close()
 # endDef
 
@@ -718,8 +718,8 @@ def main(depuracao = True, writer = object):
 
 		populacao = survivorSelection(populacao, filhos)
 
-		for (i, individuo) in enumerate(populacao):
-			writer.writerow([str(i) + ',' + str(fitnesslog(individuo))])
+		for i in populacao:
+			writer.writerow(['"'+str(i)+'"' , ("%.3f" % fitnesslog(i))])
 		
 		num_avaliacoes += len(filhos)
 
