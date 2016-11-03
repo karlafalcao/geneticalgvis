@@ -682,7 +682,7 @@ def avaliation(num_testes):
 		writer.writerow(('total_converg', total_converg))
 		writer.writerow(('it_converg', it_converg))
 		#writer.writerow(('mdconvergidos', statistics.mean(qtd_convergidos)))
-		writer.writerow(('fitmedio', fit_medio))
+		writer.writerow(('fitmedio', ("%.3f" % fit_medio)))
 
 		#print("DESVIO PADRAO DAS ITERACOES:      " + str(statistics.stdev(itr_converg)))
 		#print("MEDIA DE CONVERGIDOS POR TESTE:   " + str(statistics.mean(qtd_convergidos)))
