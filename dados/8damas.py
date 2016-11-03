@@ -435,7 +435,7 @@ def shuffleCrossover(pais):
 
 def mutation(filho):
 
-	mutante = inversion(filho) if probability(PRO_MUTACAO) else filho
+	mutante = swap(filho) if probability(PRO_MUTACAO) else filho
 	
 	return mutante
 
@@ -663,7 +663,7 @@ def avaliation(num_testes):
 		fitness_med = []
 		ofile  = open('teste'+str(i)+'.csv', "w", newline='')
 		writer = csv.writer(ofile)
-		writer.writerow(['individuo,fitness'])
+		writer.writerow(['config','fitness'])
 		print("Teste " + str(i + 1))
 
 		(it_converg, total_converg, fit_medio) = main(False, writer)
