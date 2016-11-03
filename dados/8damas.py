@@ -34,7 +34,7 @@ SHUFFLE_CROSSOVER    		= 5 # implemented
 # SEGMENTED_CROSSOVER    		= 6 
 RING_CROSSOVER				= 7 # implemented
 
-SELECTED_CROSSOVER			= RING_CROSSOVER
+SELECTED_CROSSOVER			= SINGLE_POINT_CROSSOVER
 
 # ========================================================
 
@@ -196,7 +196,7 @@ def roullete(pop, n_pais):
 def recombination(pais):
 
 	if probability(PRO_RECOMB):
-		filhos = edgeRecombination(pais)
+		filhos = cutAndCrossfill(pais)
 	else:
 		filhos = pais
 
@@ -719,7 +719,7 @@ def main(depuracao = True, writer = object):
 		populacao = survivorSelection(populacao, filhos)
 
 		for i in populacao:
-			writer.writerow(['"'+str(i)+'"' , ("%.3f" % fitnesslog(i))])
+			writer.writerow([str(i), ("%.3f" % fitnesslog(i))])
 		
 		num_avaliacoes += len(filhos)
 
