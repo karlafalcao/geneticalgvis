@@ -661,7 +661,7 @@ def avaliation(num_testes):
 		itr_converg = []
 		qtd_convergidos = []
 		fitness_med = []
-		ofile  = open('alg1teste'+str(i)+'.csv', "w", newline='')
+		ofile  = open('teste'+str(i)+'.csv', "w", newline='')
 		writer = csv.writer(ofile)
 		writer.writerow(['config','fitness'])
 		print("Teste " + str(i + 1))
@@ -675,7 +675,7 @@ def avaliation(num_testes):
 		fitness_med.append(fit_medio)
 		ofile.close()
 
-		ofile  = open('alg1info'+str(i)+'.csv', "w", newline='')
+		ofile  = open('info'+str(i)+'.csv', "w", newline='')
 		writer = csv.writer(ofile)
 		writer.writerow(('dado','valor'))
 		writer.writerow(('populacao', TAM_POPULACAO))
