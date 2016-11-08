@@ -134,7 +134,7 @@ var pcaPlots = function () {
             .attr("stroke", "black")
             .attr("cx", function(d) { return x(d.pc1); })
             .attr("cy", function(d) { return y(d.pc2); })
-            .style("fill", function(d) { return 'yellow'; })
+            .style("fill", function(d) { return color(d.component); })
 
         svg.selectAll("text.label-component")
             .data(data)
