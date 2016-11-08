@@ -1,29 +1,7 @@
-//Width and height
-var margin = {top: 20, right: 30, bottom: 20, left: 30};
-var width = 800 - margin.left - margin.right;
-var height = 600 - margin.top - margin.bottom;
-
-var dataset = [];
-
 //boxplots functions factory
 var boxplots;
-
-function log(){
-    var logList = [];
-    for (var i in arguments){
-        var logItem = arguments[i];
-
-        if (typeof logItem === 'object') {
-            logList.push(JSON.stringify(logItem));
-            continue;
-        }
-
-        logList.push(String(logItem));
-    }
-    console.log('kpsf: ', logList);
-}
-
-var baseUrl = 'dados/teste/';
+var alg = 'algoritmo1'
+var baseUrl = 'dados/'+ alg;
 
 function loadCSV(url){
     return new Promise(function(resolve, reject){
@@ -33,11 +11,11 @@ function loadCSV(url){
     })
 }
 
-function updateDataset(){
+function updateDataset() {
     //
-    var spaceData = [loadCSV(baseUrl + 'space.csv')];
-    var infoData = Array(10).fill().map(function (_, i) { return loadCSV(baseUrl + 'info'+ i +'.csv')});
-    var iterationsData = Array(10).fill().map(function (_, i) { return loadCSV(baseUrl + 'teste'+ i +'.csv')});
+    var spaceData = [loadCSV('dados/space.csv')];
+    var infoData = Array(10).fill().map(function (_, i) { return loadCSV(baseUrl + '/info'+ i +'.csv')});
+    var iterationsData = Array(10).fill().map(function (_, i) { return loadCSV(baseUrl + '/teste'+ i +'.csv')});
 
     return Promise.all([
         Promise.all(spaceData),
@@ -89,10 +67,9 @@ function getBoxPlots () {
 }
 
 function renderDataset(){
-    var year = 2015;
-    var temp = 'med';
 
-    boxplots.update(year, temp);
+    boxplots.update();
+
     //#end
 }
 
@@ -100,7 +77,11 @@ function loadDataset(dataset) {
     // Box Plot
     boxplots = getBoxPlots();
     boxplots.normalizeData(dataset);
-    boxplots.render(dataset);
+    boxplots.render();
+    
+    // PCA
+    pcaPlots.render();
+    pcaPlots.update(dataset);
 }
 
 function init(){
@@ -111,6 +92,7 @@ function init(){
             loadDataset(dataset);
             //render
             renderDataset();
+            
         });
 }
 
