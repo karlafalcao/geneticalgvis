@@ -41,6 +41,7 @@ Seleção de Sobreviventes: Elitismo
 
 
 Algoritmo 6
+
 Tipo de Crossover: Single Point
 Seleção de Pais: Torneio Simples
 Recombinação: Cut And Crossfill
@@ -48,7 +49,8 @@ Mutação: Insertion
 Seleção de Sobreviventes: Elitismo
 
 
-Opções:
+
+	Opções
 
 	Tipo de Crossover
 - Single Point
