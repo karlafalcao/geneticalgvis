@@ -1,6 +1,6 @@
 //boxplots functions factory
 var boxplots;
-var alg = 'algoritmo1'
+var alg = 'algoritmo2'
 var baseUrl = 'dados/'+ alg;
 
 function loadCSV(url){
