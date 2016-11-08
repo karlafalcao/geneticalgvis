@@ -11,8 +11,8 @@ var pcaPlots = function () {
     var x = d3.scaleLinear().range([width, 0]); // switch to match how R biplot shows it
     var y = d3.scaleLinear().range([height, 0]);
 
-    x.domain([-3.5,3.5]).nice()
-    y.domain([-3.5,3.5]).nice()
+    x.domain([-5.5,5.5]).nice()
+    y.domain([-5.5,5.5]).nice()
     
     // normally we don't want to see the axis in PCA, it's meaningless
     var showAxis = true;  
@@ -93,11 +93,11 @@ var pcaPlots = function () {
             .map(function(key, i) {
                 return {
                     id: key,
-                    pc1: B[i][0]*4,
-                    pc2: B[i][1]*4
+                    pc1: B[i][0]*6,
+                    pc2: B[i][1]*6
                 }
             });
-
+/*
         svg.selectAll("circle.dot-teste")
             .data(testes)
             .enter().append("circle")
@@ -125,12 +125,13 @@ var pcaPlots = function () {
             .attr("x2", function(d) { return x(d.pc1); })
             .attr("y2", function(d) { return y(d.pc2); })
             .style("stroke", function(d) { return color(d.id); })
-
+*/
         svg.selectAll(".component-dot")
             .data(data)
             .enter().append("circle")
             .attr("class", "component-dot")
             .attr("r", 3.5)
+            .attr("stroke", "black")
             .attr("cx", function(d) { return x(d.pc1); })
             .attr("cy", function(d) { return y(d.pc2); })
             .style("fill", function(d) { return 'yellow'; })
@@ -148,14 +149,14 @@ var pcaPlots = function () {
         var normData;
         
         console.log(data);
-        //#juninho Preencher aqui 
+
         normData = [
-            {"component":"ALG 1","Teste 1":05,"Teste 2":17,"Teste 3":0,"Teste 4":0,"Teste 5":0,"Teste 6":0},
-            {"component":"ALG 2","Teste 1":32,"Teste 2":29,"Teste 3":13,"Teste 4":03,"Teste 5":03,"Teste 6":04},
-            {"component":"ALG 3","Teste 1":18,"Teste 2":24,"Teste 3":13,"Teste 4":2,"Teste 5":15,"Teste 6":28},
-            {"component":"ALG 4","Teste 1":12,"Teste 2":0,"Teste 3":0,"Teste 4":0,"Teste 5":0,"Teste 6":0},
-            {"component":"ALG 5","Teste 1":13,"Teste 2":02,"Teste 3":0,"Teste 4":0,"Teste 5":0,"Teste 6":0},
-            {"component":"ALG 6","Teste 1":12,"Teste 2":0,"Teste 3":03,"Teste 4":04,"Teste 5":23,"Teste 6":06}
+            {"component":"ALG 1","Teste 1":12,"Teste 2":0,"Teste 3":2,"Teste 4":16,"Teste 5":25,"Teste 6":1},
+            {"component":"ALG 2","Teste 1":34,"Teste 2":13,"Teste 3":9,"Teste 4":8,"Teste 5":13,"Teste 6":10},
+            {"component":"ALG 3","Teste 1":4,"Teste 2":8,"Teste 3":1,"Teste 4":1,"Teste 5":3,"Teste 6":8},
+            {"component":"ALG 4","Teste 1":9,"Teste 2":0,"Teste 3":7,"Teste 4":0,"Teste 5":3,"Teste 6":3},
+            {"component":"ALG 5","Teste 1":44,"Teste 2":50,"Teste 3":47,"Teste 4":47,"Teste 5":50,"Teste 6":50},
+            {"component":"ALG 6","Teste 1":0,"Teste 2":9,"Teste 3":0,"Teste 4":0,"Teste 5":10,"Teste 6":0}
         ];
         return normData;
     }
