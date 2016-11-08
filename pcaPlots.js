@@ -151,12 +151,12 @@ var pcaPlots = function () {
         console.log(data);
 
         normData = [
-            {"component":"ALG 1","Teste 1":12,"Teste 2":0,"Teste 3":2,"Teste 4":16,"Teste 5":25,"Teste 6":1},
-            {"component":"ALG 2","Teste 1":34,"Teste 2":13,"Teste 3":9,"Teste 4":8,"Teste 5":13,"Teste 6":10},
-            {"component":"ALG 3","Teste 1":4,"Teste 2":8,"Teste 3":1,"Teste 4":1,"Teste 5":3,"Teste 6":8},
-            {"component":"ALG 4","Teste 1":9,"Teste 2":0,"Teste 3":7,"Teste 4":0,"Teste 5":3,"Teste 6":3},
-            {"component":"ALG 5","Teste 1":44,"Teste 2":50,"Teste 3":47,"Teste 4":47,"Teste 5":50,"Teste 6":50},
-            {"component":"ALG 6","Teste 1":0,"Teste 2":9,"Teste 3":0,"Teste 4":0,"Teste 5":10,"Teste 6":0}
+            {"component":"Algoritmo 1","Teste 1":12,"Teste 2":0,"Teste 3":2,"Teste 4":16,"Teste 5":25,"Teste 6":1},
+            {"component":"Algoritmo 2","Teste 1":34,"Teste 2":13,"Teste 3":9,"Teste 4":8,"Teste 5":13,"Teste 6":10},
+            {"component":"Algoritmo 3","Teste 1":4,"Teste 2":8,"Teste 3":1,"Teste 4":1,"Teste 5":3,"Teste 6":8},
+            {"component":"Algoritmo 4","Teste 1":9,"Teste 2":0,"Teste 3":7,"Teste 4":0,"Teste 5":3,"Teste 6":3},
+            {"component":"Algoritmo 5","Teste 1":44,"Teste 2":50,"Teste 3":47,"Teste 4":47,"Teste 5":50,"Teste 6":50},
+            {"component":"Algoritmo 6","Teste 1":0,"Teste 2":9,"Teste 3":0,"Teste 4":0,"Teste 5":10,"Teste 6":0}
         ];
         return normData;
     }
