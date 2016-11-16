@@ -93,7 +93,7 @@ var algenBoxPlots = function () {
             });
 
         xAxisElem.append('text')
-            .text('Testes #'+ alg)
+            .text('Testes #'+ algorithms[selectedAlgorithm])
             .attrs({
                 x: width + 20,
                 y: -10,

@@ -1,8 +1,8 @@
 //boxplots functions factory
 var boxplots;
 
-var alg = 'algoritmo5';
-var baseUrl = 'dados/'+ alg;
+var algorithms = ['pmx1', 'pmx2', 'pmx3', 'pmx4', 'pmx5', 'pmx6'];
+var selectedAlgorithm = '0';
 
 function loadCSV(url){
     return new Promise(function(resolve, reject){
@@ -12,29 +12,17 @@ function loadCSV(url){
     })
 }
 
-function updateDataset() {
-    //var useSel = true;
-    //var selVal = document.getElementById('alg-select').value;
-    //console.log(document.getElementById('alg-select').value);
-	//
-    //if (useSel && selVal) {
-    //    alg = selVal;
-    //}
-    //var baseUrl = 'dados/'+ alg;
-
-    //
-    var spaceData = [loadCSV('dados/space.csv')];
-    var infoData = Array(10).fill().map(function (_, i) { return loadCSV(baseUrl + '/info'+ i +'.csv')});
-    var iterationsData = Array(10).fill().map(function (_, i) { return loadCSV(baseUrl + '/teste'+ i +'.csv')});
+function loadDatasetForAlgorithm(alg) {
+    var infoData = Array(10).fill().map(function (_, i) { return loadCSV('dados/'+ alg + '/info'+ i +'.csv')});
+    var iterationsData = Array(10).fill().map(function (_, i) { return loadCSV('dados/'+ alg + '/teste'+ i +'.csv')});
 
     return Promise.all([
-        Promise.all(spaceData),
         Promise.all(infoData),
         Promise.all(iterationsData)]
     ).then(function(data) {
         console.log(data);
-        infoData = data[1];
-        iterationsData = data[2];
+        infoData = data[0];
+        iterationsData = data[1];
 
         var dataset = Array(10).fill().map(function (_, testIndex) {
             var item = {};
@@ -72,6 +60,17 @@ function updateDataset() {
     });
 }
 
+function updateDataset() {
+    //
+    var promiseList = [];
+
+    algorithms.forEach(function(alg) {
+        promiseList.push(loadDatasetForAlgorithm(alg));
+    });
+
+    return Promise.all(promiseList);
+}
+
 function getBoxPlots () {
     return algenBoxPlots;
 }
@@ -80,18 +79,28 @@ function renderDataset(){
 
     boxplots.update();
 
+    pcaPlots.update();
     //#end
 }
 
 function loadDataset(dataset) {
+
+    //var useSel = true;
+    //var selVal = document.getElementById('alg-select').value;
+    //console.log(document.getElementById('alg-select').value);
+    //
+    //if (useSel && selVal) {
+    //    alg = selVal;
+    //}
+
     // Box Plot
     boxplots = getBoxPlots();
-    boxplots.normalizeData(dataset);
+    boxplots.normalizeData(dataset[selectedAlgorithm]);
     boxplots.render();
-    
+
     // PCA
+    pcaPlots.normalizedData(dataset);
     pcaPlots.render();
-    pcaPlots.update(dataset);
 }
 
 function init(){
