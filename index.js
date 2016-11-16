@@ -1,6 +1,7 @@
 //boxplots functions factory
 var boxplots;
-var alg = 'algoritmo2'
+
+var alg = 'algoritmo5';
 var baseUrl = 'dados/'+ alg;
 
 function loadCSV(url){
@@ -12,6 +13,15 @@ function loadCSV(url){
 }
 
 function updateDataset() {
+    //var useSel = true;
+    //var selVal = document.getElementById('alg-select').value;
+    //console.log(document.getElementById('alg-select').value);
+	//
+    //if (useSel && selVal) {
+    //    alg = selVal;
+    //}
+    //var baseUrl = 'dados/'+ alg;
+
     //
     var spaceData = [loadCSV('dados/space.csv')];
     var infoData = Array(10).fill().map(function (_, i) { return loadCSV(baseUrl + '/info'+ i +'.csv')});

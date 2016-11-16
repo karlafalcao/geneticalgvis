@@ -93,10 +93,10 @@ var algenBoxPlots = function () {
             });
 
         xAxisElem.append('text')
-            .text('Teste#')
+            .text('Testes #'+ alg)
             .attrs({
-                x: width + 60,
-                y: -20,
+                x: width + 20,
+                y: -10,
                 dy: '0.71em',
                 fill: '#000'
             });
