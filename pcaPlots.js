@@ -68,52 +68,52 @@ var pcaPlots = function () {
     function updatePcaPlots() {
 
 		//
-        //svg.selectAll("circle.dot-teste")
-        //    .data(testes)
-        //    .enter().append("circle")
-        //    .attr("class", "dot-teste")
-        //    .attr("r", 7)
-        //    .attr("cx", function(d) { return x(d.pc1); })
-        //    .attr("cy", function(d) { return y(d.pc2); })
-        //    .style("fill", function(d) { return color(d.id); })
-		//
-        //svg.selectAll("text.label-teste")
-        //    .data(testes)
-        //    .enter().append("text")
-        //    .attr("class", "label-teste")
-        //    .attr("x", function(d) { return x(d.pc1) + 10; })
-        //    .attr("y", function(d) { return y(d.pc2) + 0; })
-        //    .text(function(d) { return d.id})
-		//
-		//
-        //svg.selectAll(".line-teste")
-        //    .data(testes)
-        //    .enter().append("line")
-        //    .attr("class", "square")
-        //    .attr('x1', function(d) { return x(-d.pc1);})
-        //    .attr('y1', function(d) { return y(-d.pc2); })
-        //    .attr("x2", function(d) { return x(d.pc1); })
-        //    .attr("y2", function(d) { return y(d.pc2); })
-        //    .style("stroke", function(d) { return color(d.id); });
-
-        //component
-        svg.selectAll(".component-dot")
+        svg.selectAll("circle.dot-component")
             .data(dataset)
             .enter().append("circle")
-            .attr("class", "component-dot")
-            .attr("r", 3.5)
-            .attr("stroke", "black")
+            .attr("class", "dot-component")
+            .attr("r", 7)
             .attr("cx", function(d) { return x(d.pc1); })
             .attr("cy", function(d) { return y(d.pc2); })
-            .style("fill", function(d) { return color(d.component); })
+            .style("fill", function(d) { return color(d.id); });
 
         svg.selectAll("text.label-component")
             .data(dataset)
             .enter().append("text")
             .attr("class", "label-component")
-            .attr("x", function(d,i ) { return x(d.pc1) + 4 ; })
-            .attr("y", function(d ,i) { return y(d.pc2); })
-            .text(function(d,i) { return d.component})
+            .attr("x", function(d) { return x(d.pc1) + 10; })
+            .attr("y", function(d) { return y(d.pc2) + 0; })
+            .text(function(d) { return d.id});
+
+
+        svg.selectAll(".line-component")
+            .data(dataset)
+            .enter().append("line")
+            .attr("class", "line-component")
+            .attr('x1', function(d) { return x(-d.pc1);})
+            .attr('y1', function(d) { return y(-d.pc2); })
+            .attr("x2", function(d) { return x(d.pc1); })
+            .attr("y2", function(d) { return y(d.pc2); })
+            .style("stroke", function(d) { return color(d.id); });
+
+        //
+        //svg.selectAll(".sample-dot")
+        //    .data(testes)
+        //    .enter().append("circle")
+        //    .attr("class", "sample-dot")
+        //    .attr("r", 3.5)
+        //    .attr("stroke", "black")
+        //    .attr("cx", function(d) { return x(d.pc1); })
+        //    .attr("cy", function(d) { return y(d.pc2); })
+        //    .style("fill", function(d) { console.log(d); return '#000'; });
+		//
+        //svg.selectAll("text.label-sample")
+        //    .data(testes)
+        //    .enter().append("text")
+        //    .attr("class", "label-sample")
+        //    .attr("x", function(d,i ) { return x(d.pc1) + 4 ; })
+        //    .attr("y", function(d ,i) { return y(d.pc2); })
+        //    .text(function(d,i) { return d.id})
     }
 
     /*
@@ -124,9 +124,9 @@ var pcaPlots = function () {
         var matrix = dataset.map(function(d){
             return d3.values(d).slice(1,d.length).map(parseFloat);
         });
-
+        console.log(matrix);
         //Transpose to get PCA from transposed attrs
-        //matrix = d3.transpose(matrix);
+        matrix = d3.transpose(matrix);
 
         var pca = new PCA();
         matrix = pca.scale(matrix,true,true);
@@ -134,8 +134,8 @@ var pcaPlots = function () {
         pc = pca.pca(matrix,2);
 
         return {
-            U: pc[0],  // this is the U matrix from SVD
-            dV: pc[0]  // this is the dV matrix from SVD
+            a: pc[0], // this is the U matrix from SVD
+            b: pc[1]  // this is the dV matrix from SVD
         }
     }
 
@@ -147,10 +147,9 @@ var pcaPlots = function () {
             var item = {};
 
             algorithmData.forEach(function(teste, testeIndex){
-                if (testeIndex > 5) return;
                 item['Teste '+ testeIndex] = teste['info']['total_converg'];
             });
-
+            console.log(item);
             dataset.push(Object.assign({
                 component: algorithm
             }, item));
@@ -168,21 +167,22 @@ var pcaPlots = function () {
         var pc = getPCFromSVD(dataset);
         console.log(pc);
 
-        var componentNames = Object.keys(dataset[0]);  // key values
-        componentNames.shift(); // drop the first column label, e.g. "component"
+        var samples = Object.keys(dataset[0]);  // key values
+        samples.shift(); // drop the first column label, e.g. "component"
 
-        testes = componentNames
+        testes = samples
             .map(function(key, i) {
                 return {
                     id: key,
-                    pc1: pc.dV[i][0]*6,
-                    pc2: pc.dV[i][1]*6
+                    pc1: pc.a[i][0],
+                    pc2: pc.a[i][1]
                 }
             });
 
         dataset.map(function(d,i){
-            d.pc1 = pc.U[i][0];
-            d.pc2 = pc.U[i][1];
+            d.id = d.component;
+            d.pc1 = pc.b[i][0]*6;
+            d.pc2 = pc.b[i][1]*6;
         });
 
     }

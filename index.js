@@ -95,14 +95,6 @@ function subscribeSelection(){
 }
 function loadDataset() {
 
-    //var useSel = true;
-    //var selVal = document.getElementById('alg-select').value;
-    //console.log(document.getElementById('alg-select').value);
-    //
-    //if (useSel && selVal) {
-    //    alg = selVal;
-    //}
-
     // Box Plot
     boxplots = getBoxPlots();
     boxplots.normalizeData(dataset[selectedAlgorithm]);

@@ -63,7 +63,7 @@ var algenBoxPlots = function () {
             .attrs({
                 x: width/2 + 20,
                 y: 20,
-                dy: '0.71em',
+                'font-size': '1em',
                 fill: '#000'
             });
 
@@ -75,7 +75,7 @@ var algenBoxPlots = function () {
             .attrs({
                 transform: 'translate(-50, ' + (height/2 - 50) +') rotate(-90)',
                 y: 6,
-                dy: '0.71em',
+                'font-size' : '1em',
                 fill: '#000'
             })
             .text('Variancias das iterações');
@@ -90,9 +90,6 @@ var algenBoxPlots = function () {
         //scales
         xScale = d3.scaleBand().rangeRound([0, width]).padding(0);
         xScale.domain(d3.range(dataset.length));
-        //barWidth = xScale.bandwidth() - 10;
-        //padding = barWidth / 2;
-        //console.log(barWidth);
 
         yScale = d3.scaleLinear().range([0, height]);
         yScale.domain([0, d3.max(dataset, function (d) {
@@ -143,6 +140,32 @@ var algenBoxPlots = function () {
         //
         setRectStyle(bar);
 
+        appGroup.append('text')
+            .text(function(d) {
+                return 'Q3 '; //+ d.min
+            })
+            .attrs(function (d) {
+                return {
+                    x: xAxisScale(d.id) + barWidth / 2 + 5,
+                    y: height - yScale(d.q3),
+                    'font-size' : '0.6em',
+                    fill: '#000'
+                }
+            });
+
+        appGroup.append('text')
+            .text(function(d) {
+                return 'Q1 '; //+ d.min
+            })
+            .attrs(function (d) {
+                return {
+                    x: xAxisScale(d.id) + barWidth / 2 + 5,
+                    y: height - yScale(d.q1),
+                    'font-size' : '0.6em',
+                    fill: '#000'
+                }
+            });
+
         //Min marker
         appGroup.append('line')
             .attrs(function (d) {
@@ -154,6 +177,20 @@ var algenBoxPlots = function () {
                     stroke: '#000'
                 }
             });
+
+        appGroup.append('text')
+            .text(function(d) {
+                return 'Min '; //+ d.min
+            })
+            .attrs(function (d) {
+                return {
+                    x: xAxisScale(d.id) + barWidth / 2 + 5,
+                    y: height - yScale(d.min),
+                    'font-size' : '0.6em',
+                    fill: '#000'
+                }
+            });
+
         //Max marker
         appGroup.append('line')
             .attrs(function (d) {
@@ -166,6 +203,19 @@ var algenBoxPlots = function () {
                 }
             });
 
+        appGroup.append('text')
+            .text(function(d) {
+                return 'Max '; //+ d.min
+            })
+            .attrs(function (d) {
+                return {
+                    x: xAxisScale(d.id) + barWidth / 2 + 5,
+                    y: height - yScale(d.max),
+                    'font-size' : '0.6em',
+                    fill: '#000'
+                }
+            });
+
         //Median marker
         appGroup.append('line')
             .attrs(function (d) {
@@ -175,6 +225,19 @@ var algenBoxPlots = function () {
                     y1: height - yScale(d.median),
                     y2: height - yScale(d.median),
                     stroke: '#000'
+                }
+            });
+
+        appGroup.append('text')
+            .text(function(d) {
+                return 'Median '; //+ d.min
+            })
+            .attrs(function (d) {
+                return {
+                    x: xAxisScale(d.id) + barWidth / 2 + 5,
+                    y: height - yScale(d.median),
+                    'font-size' : '0.6em',
+                    fill: '#000'
                 }
             });
     }
@@ -194,6 +257,8 @@ var algenBoxPlots = function () {
 
             variances.sort(function(){return arguments[0] - arguments[1]});
             var boxPlotValues = getBoxPlotValues(variances);
+
+            console.log(boxPlotValues);
 
             var mapValue = Object.assign({}, {
                 key: i,
@@ -220,11 +285,14 @@ var algenBoxPlots = function () {
             }
         });
 
+        var q1 = d3.median(lowerHalf);
+        var q3 = d3.median(upperHalf);
+
         return {
             median: median,
 
-            q1: d3.median(lowerHalf),
-            q3: d3.median(upperHalf),
+            q1: q1?q1:0 ,
+            q3: q3?q3:0,
 
             min: data[0],
             max: data[data.length-1]
@@ -248,6 +316,7 @@ var algenBoxPlots = function () {
             .attr('fill', function (d) {
                 return getColorForDateBar(d.id);
             });
+
     };
 
     return {
