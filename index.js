@@ -1,9 +1,10 @@
 //boxplots functions factory
 var boxplots;
+var pcaPlots;
 
 var algorithms = ['pmx1', 'pmx2', 'pmx3', 'pmx4', 'pmx5', 'pmx6'];
 var selectedAlgorithm = '0';
-
+var dataset;
 function loadCSV(url){
     return new Promise(function(resolve, reject){
         d3.csv(url, function(data) {
@@ -20,7 +21,6 @@ function loadDatasetForAlgorithm(alg) {
         Promise.all(infoData),
         Promise.all(iterationsData)]
     ).then(function(data) {
-        console.log(data);
         infoData = data[0];
         iterationsData = data[1];
 
@@ -52,7 +52,6 @@ function loadDatasetForAlgorithm(alg) {
                 return iteration;
             });
 
-            console.log(item);
             return item;
         });
 
@@ -83,7 +82,18 @@ function renderDataset(){
     //#end
 }
 
-function loadDataset(dataset) {
+function subscribeSelection(){
+    var selVal = document.getElementById('alg-select');
+    selVal.addEventListener('change', function(e) {
+        selectedAlgorithm = this.value;
+        boxplots.remove();
+        boxplots.normalizeData(dataset[selectedAlgorithm]);
+        boxplots.update();
+
+    })
+
+}
+function loadDataset() {
 
     //var useSel = true;
     //var selVal = document.getElementById('alg-select').value;
@@ -106,11 +116,14 @@ function loadDataset(dataset) {
 function init(){
     //#begin
     updateDataset()
-        .then(function(dataset){
-            console.log(dataset);
-            loadDataset(dataset);
+        .then(function(data){
+            dataset = data;
+            console.log(data);
+            loadDataset();
             //render
             renderDataset();
+
+            subscribeSelection();
             
         });
 }

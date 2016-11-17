@@ -8,7 +8,7 @@ var algenBoxPlots = function () {
 
     //Update scale domains
     var barWidth = 40;
-    var padding = 0;
+    var padding = barWidth / 2;
     var xScale;
     var yScale;
 
@@ -31,44 +31,10 @@ var algenBoxPlots = function () {
             .attr('height', height)
             .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
-        svg
-            .append('g')
-            .attr('id', 'time-axis-x');
-
-        svg
-            .append('g')
-            .attr('id', 'time-axis-y');
-
-    }
-
-    function updateBoxPlots() {
-        //scales
-        xScale = d3.scaleBand().rangeRound([0, width]).padding(0);
-        xScale.domain(d3.range(dataset.length));
-        barWidth = xScale.bandwidth() - 10;
-        padding = barWidth / 2;
-
-        yScale = d3.scaleLinear().range([0, height]);
-        yScale.domain([0, d3.max(dataset, function (d) {
-            return d.value;
-        })]);
-
-        xAxisScale = d3.scaleLinear().range([padding, width + padding]);
-        xAxisScale.domain([1, dataset.length]);
-
-        yAxisScale = d3.scaleLinear().range([height, 0]);
-        yAxisScale.domain([0, d3.max(dataset, function (d) {
-            return d.value;
-        })]);
-
-        //x-axis
-        var xAxis = d3.axisBottom(xAxisScale);
-
         var xAxisElem = svg
-            .select('#time-axis-x')
-            .call(xAxis)
-            .attr('transform', 'translate(0,' + height + ')')
-
+            .append('g')
+            .attr('id', 'boxplot-axis-x')
+            .attr('transform', 'translate(0,' + height + ')');
 
         xAxisElem.append('line')
             .attrs(function (d) {
@@ -85,7 +51,7 @@ var algenBoxPlots = function () {
             .attrs(function (d) {
                 return {
                     x1: 0,
-                    x2: barWidth / 2,
+                    x2: padding,
                     y1: .5,
                     y2: .5,
                     stroke: '#000'
@@ -95,33 +61,72 @@ var algenBoxPlots = function () {
         xAxisElem.append('text')
             .text('Testes #'+ algorithms[selectedAlgorithm])
             .attrs({
-                x: width + 20,
-                y: -10,
+                x: width/2 + 20,
+                y: 20,
                 dy: '0.71em',
                 fill: '#000'
             });
 
-        //y-axis
+
         svg
-            .select('#time-axis-y')
-            .call(d3.axisLeft(yAxisScale))
+            .append('g')
+            .attr('id', 'boxplot-axis-y')
             .append('text')
             .attrs({
-                transform: 'rotate(-90)',
+                transform: 'translate(-50, ' + (height/2 - 50) +') rotate(-90)',
                 y: 6,
                 dy: '0.71em',
                 fill: '#000'
             })
             .text('Variancias das iterações');
 
-        //graphs
+    }
+
+    function removeBoxPlots() {
+        svg.selectAll('.boxplots-group').remove();
+    }
+
+    function updateBoxPlots() {
+        //scales
+        xScale = d3.scaleBand().rangeRound([0, width]).padding(0);
+        xScale.domain(d3.range(dataset.length));
+        //barWidth = xScale.bandwidth() - 10;
+        //padding = barWidth / 2;
+        //console.log(barWidth);
+
+        yScale = d3.scaleLinear().range([0, height]);
+        yScale.domain([0, d3.max(dataset, function (d) {
+            return d.value;
+        })]);
+
+        xAxisScale = d3.scaleLinear().range([padding, width + padding]);
+        xAxisScale.domain([1, dataset.length]);
+
+        yAxisScale = d3.scaleLinear().range([height, 0]);
+        yAxisScale.domain([0, d3.max(dataset, function (d) {
+            return d.value;
+        })]);
+
+        //x-axis
+        svg
+            .select('#boxplot-axis-x')
+            .call(d3.axisBottom(xAxisScale));
+
+        //y-axis
+        svg
+            .select('#boxplot-axis-y')
+            .call(d3.axisLeft(yAxisScale));
+
+        //boxes
         var boxPlotGroup = svg.selectAll('g')
             .data(dataset, key);
 
         var appGroup = boxPlotGroup
-            .enter().append('g');
+            .enter()
+            .append('g')
+            .attr('class', 'boxplots-group');
 
-        //middle line
+        //vertical middle line
         appGroup.append('line')
             .attrs(function (d) {
                 return {
@@ -135,8 +140,9 @@ var algenBoxPlots = function () {
 
         //Select...
         var bar = appGroup.append('rect');
-        //Update...
+        //
         setRectStyle(bar);
+
         //Min marker
         appGroup.append('line')
             .attrs(function (d) {
@@ -196,7 +202,6 @@ var algenBoxPlots = function () {
                 values: variances
             }, boxPlotValues);
 
-            console.log(mapValue);
             return mapValue;
         });
     }
@@ -247,6 +252,7 @@ var algenBoxPlots = function () {
 
     return {
         normalizeData: normalizeData,
+        remove: removeBoxPlots,
         render: renderBoxPlots,
         update: updateBoxPlots
     };

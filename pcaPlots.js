@@ -128,8 +128,6 @@ var pcaPlots = function () {
         //Transpose to get PCA from transposed attrs
         //matrix = d3.transpose(matrix);
 
-        console.log(matrix);
-
         var pca = new PCA();
         matrix = pca.scale(matrix,true,true);
 
@@ -137,13 +135,11 @@ var pcaPlots = function () {
 
         return {
             U: pc[0],  // this is the U matrix from SVD
-            dV: pc[0] // this is the dV matrix from SVD
+            dV: pc[0]  // this is the dV matrix from SVD
         }
     }
 
     function normalizedData (data) {
-        console.log(data);
-
         //create dataset dynamically
         dataset = [];
         algorithms.forEach(function (algorithm, index) {
@@ -160,7 +156,6 @@ var pcaPlots = function () {
             }, item));
         });
 
-        console.log(dataset);
         //dataset = [
         //    {"component":"Algoritmo 1","Teste 1":12,"Teste 2":0,"Teste 3":2,"Teste 4":16,"Teste 5":25,"Teste 6":1},
         //    {"component":"Algoritmo 2","Teste 1":34,"Teste 2":13,"Teste 3":9,"Teste 4":8,"Teste 5":13,"Teste 6":10},
@@ -171,15 +166,11 @@ var pcaPlots = function () {
         //];
 
         var pc = getPCFromSVD(dataset);
-        //console.log(pc);
-
-        dataset.map(function(d,i){
-            d.pc1 = pc.U[i][0];
-            d.pc2 = pc.U[i][1];
-        });
+        console.log(pc);
 
         var componentNames = Object.keys(dataset[0]);  // key values
         componentNames.shift(); // drop the first column label, e.g. "component"
+
         testes = componentNames
             .map(function(key, i) {
                 return {
@@ -188,6 +179,12 @@ var pcaPlots = function () {
                     pc2: pc.dV[i][1]*6
                 }
             });
+
+        dataset.map(function(d,i){
+            d.pc1 = pc.U[i][0];
+            d.pc2 = pc.U[i][1];
+        });
+
     }
 
     return {
