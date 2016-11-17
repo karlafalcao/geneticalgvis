@@ -73,7 +73,7 @@ var algenBoxPlots = function () {
             .attr('id', 'boxplot-axis-y')
             .append('text')
             .attrs({
-                transform: 'translate(-50, ' + (height/2 - 50) +') rotate(-90)',
+                transform: 'translate(-45, ' + (height/2 - 50) +') rotate(-90)',
                 y: 6,
                 'font-size' : '1em',
                 fill: '#000'
