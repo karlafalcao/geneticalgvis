@@ -1,56 +1,26 @@
-﻿
-Algoritmo 1:
+﻿Algoritmo no. 1:
 
-Tipo de Crossover: Single Point
-Seleção de Pais: Torneio
-Recombinação: Order1
-Mutação: Scramble
-Seleção de Sobreviventes: Elitism
-
-Algoritmo 2
-
-Tipo de Crossover: Single Point
-Seleção de Pais: Torneio
-Recombinação: Order1
-Mutação: Swap
-Seleção de Sobreviventes: Replace Worst
-
-Algoritmo 3
-
-Tipo de Crossover: Single Point
-Seleção de Pais: Torneio
-Recombinação: Order1
-Mutação: Swap
-Seleção de Sobreviventes: Replace Worst
-
-Algoritmo 4
-
-Tipo de Crossover: Single Point
-Seleção de Pais: Torneio Simples
-Recombinação: Edge Recombination
-Mutação: Insertion
-Seleção de Sobreviventes: Elitismo
-
-Algoritmo 5
-
-Tipo de Crossover: Single Point
 Seleção de Pais: Torneio Simples
 Recombinação: PMX
 Mutação: Insertion
 Seleção de Sobreviventes: Elitismo
 
+Variações:
 
-Algoritmo 6
+A) Seleção de Sobreviventes: Replace Worst
 
-Tipo de Crossover: Single Point
-Seleção de Pais: Torneio Simples
-Recombinação: Cut And Crossfill
-Mutação: Insertion
-Seleção de Sobreviventes: Elitismo
+B) Mutação: Swap
+
+C) Mutação: Inversion
+
+D) Seleção de Pais: Torneio
+
+E) Seleção de Pais: Roleta
 
 
 
-	Opções
+
+	Outras Opções
 
 	Tipo de Crossover
 - Single Point

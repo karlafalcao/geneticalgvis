@@ -700,7 +700,27 @@ def avaliation(num_testes):
 
 def main(depuracao = True, writer = object):
 
-	populacao = generatePopulation(TAM_POPULACAO, True)
+	#populacao = generatePopulation(TAM_POPULACAO, True)
+	populacao = [[0, 2, 1, 3, 4, 6, 5, 7],
+	[3, 4, 1, 6, 7, 2, 5, 0],
+	[0, 7, 3, 4, 5, 6, 2, 1],
+	[6, 1, 4, 5, 0, 7, 2, 3],
+	[3, 4, 5, 2, 1, 6, 7, 0],
+	[2, 6, 4, 5, 7, 3, 0, 1],
+	[1, 3, 4, 7, 6, 5, 0, 2],
+	[5, 2, 1, 0, 6, 7, 3, 4],
+	[1, 4, 0, 3, 2, 6, 7, 5],
+	[2, 1, 0, 5, 7, 6, 4, 3],
+	[7, 3, 6, 2, 1, 0, 5, 4],
+	[2, 4, 0, 6, 7, 1, 3, 5],
+	[7, 0, 2, 5, 6, 3, 4, 1],
+	[1, 2, 5, 7, 6, 3, 4, 0],
+	[5, 7, 0, 1, 6, 2, 4, 3],
+	[5, 7, 1, 6, 4, 3, 2, 0],
+	[5, 6, 7, 2, 4, 1, 0, 3],
+	[2, 4, 0, 6, 3, 7, 1, 5],
+	[5, 1, 7, 3, 2, 4, 6, 0],
+	[6, 3, 7, 5, 0, 4, 1, 2]]
 	num_avaliacoes = TAM_POPULACAO
 
 	if depuracao:
