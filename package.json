@@ -1,0 +1,25 @@
+{
+  "name": "algoritmo-vis",
+  "version": "1.0.0",
+  "description": "Visualização de algoritmos genéticos",
+  "main": "index.js",
+  "dependencies": {
+    "d3": "^4.4.0",
+    "jsonfile": "^2.4.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "generatejson": "node generateData.js",
+    "genpmx1": "node_modules/csvtojson/bin/csvtojson dados/pmx1/info0.csv > dados/pmx1/info0.json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/karlafalcao/algoritmos_lewis_karla-visualizacao-2016-2.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/karlafalcao/algoritmos_lewis_karla-visualizacao-2016-2/issues"
+  },
+  "homepage": "https://github.com/karlafalcao/algoritmos_lewis_karla-visualizacao-2016-2#readme"
+}

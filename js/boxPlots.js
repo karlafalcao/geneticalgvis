@@ -1,10 +1,10 @@
-var algenBoxPlots = function () {
+var boxPlots = function () {
     var svg;
     var margin = {top: 20, right: 80, bottom: 30, left: 50};
 
     //Width and height
-    var width = 1000 - margin.left - margin.right;
-    var height = 500 - margin.top - margin.bottom;
+    var width = 800 - margin.left - margin.right;
+    var height = 400 - margin.top - margin.bottom;
 
     //Update scale domains
     var barWidth = 40;
@@ -18,9 +18,9 @@ var algenBoxPlots = function () {
     var dateBarColor = '#ccc';
     var dataset;
 
-    function renderBoxPlots() {
+    function init() {
         //Create SVG element
-        var svgContainer = d3.select('body')
+        var svgContainer = d3.select('#main')
             .append('svg')
             .attr('id', '#boxplots')
             .attr('width', width + margin.left + margin.right)
@@ -82,11 +82,11 @@ var algenBoxPlots = function () {
 
     }
 
-    function removeBoxPlots() {
+    function remove() {
         svg.selectAll('.boxplots-group').remove();
     }
 
-    function updateBoxPlots() {
+    function render() {
         //scales
         xScale = d3.scaleBand().rangeRound([0, width]).padding(0);
         xScale.domain(d3.range(dataset.length));
@@ -137,84 +137,35 @@ var algenBoxPlots = function () {
 
         //Select...
         var bar = appGroup.append('rect');
+
         //
         setRectStyle(bar);
 
-        appGroup.append('text')
-            .text(function(d) {
-                return 'Q3 '; //+ d.min
-            })
-            .attrs(function (d) {
-                return {
-                    x: xAxisScale(d.id) + barWidth / 2 + 5,
-                    y: height - yScale(d.q3),
-                    'font-size' : '0.6em',
-                    fill: '#000'
-                }
-            });
+        // appGroup.append('text')
+        //     .text(function(d) {
+        //         return 'Q3 '; //+ d.min
+        //     })
+        //     .attrs(function (d) {
+        //         return {
+        //             x: xAxisScale(d.id) + barWidth / 2 + 5,
+        //             y: height - yScale(d.q3),
+        //             'font-size' : '0.6em',
+        //             fill: '#000'
+        //         }
+        //     });
 
-        appGroup.append('text')
-            .text(function(d) {
-                return 'Q1 '; //+ d.min
-            })
-            .attrs(function (d) {
-                return {
-                    x: xAxisScale(d.id) + barWidth / 2 + 5,
-                    y: height - yScale(d.q1),
-                    'font-size' : '0.6em',
-                    fill: '#000'
-                }
-            });
-
-        //Min marker
-        appGroup.append('line')
-            .attrs(function (d) {
-                return {
-                    x1: xAxisScale(d.id) - barWidth / 2,
-                    x2: xAxisScale(d.id) + barWidth / 2,
-                    y1: height - yScale(d.min),
-                    y2: height - yScale(d.min),
-                    stroke: '#000'
-                }
-            });
-
-        appGroup.append('text')
-            .text(function(d) {
-                return 'Min '; //+ d.min
-            })
-            .attrs(function (d) {
-                return {
-                    x: xAxisScale(d.id) + barWidth / 2 + 5,
-                    y: height - yScale(d.min),
-                    'font-size' : '0.6em',
-                    fill: '#000'
-                }
-            });
-
-        //Max marker
-        appGroup.append('line')
-            .attrs(function (d) {
-                return {
-                    x1: xAxisScale(d.id) - barWidth / 2,
-                    x2: xAxisScale(d.id) + barWidth / 2,
-                    y1: height - yScale(d.max),
-                    y2: height - yScale(d.max),
-                    stroke: '#000'
-                }
-            });
-
-        appGroup.append('text')
-            .text(function(d) {
-                return 'Max '; //+ d.min
-            })
-            .attrs(function (d) {
-                return {
-                    x: xAxisScale(d.id) + barWidth / 2 + 5,
-                    y: height - yScale(d.max),
-                    'font-size' : '0.6em',
-                    fill: '#000'
-                }
-            });
+        // appGroup.append('text')
+        //     .text(function(d) {
+        //         return 'Q1 '; //+ d.min
+        //     })
+        //     .attrs(function (d) {
+        //         return {
+        //             x: xAxisScale(d.id) + barWidth / 2 + 5,
+        //             y: height - yScale(d.q1),
+        //             'font-size' : '0.6em',
+        //             fill: '#000'
+        //         }
+        //     });
 
         //Median marker
         appGroup.append('line')
@@ -228,18 +179,69 @@ var algenBoxPlots = function () {
                 }
             });
 
-        appGroup.append('text')
-            .text(function(d) {
-                return 'Median '; //+ d.min
-            })
+        // appGroup.append('text')
+        //     .text(function(d) {
+        //         return 'Median '; //+ d.min
+        //     })
+        //     .attrs(function (d) {
+        //         return {
+        //             x: xAxisScale(d.id) + barWidth / 2 + 5,
+        //             y: height - yScale(d.median),
+        //             'font-size' : '0.6em',
+        //             fill: '#000'
+        //         }
+        //     });
+
+        //Min marker
+        appGroup.append('line')
             .attrs(function (d) {
                 return {
-                    x: xAxisScale(d.id) + barWidth / 2 + 5,
-                    y: height - yScale(d.median),
-                    'font-size' : '0.6em',
-                    fill: '#000'
+                    x1: xAxisScale(d.id) - barWidth / 2,
+                    x2: xAxisScale(d.id) + barWidth / 2,
+                    y1: height - yScale(d.min),
+                    y2: height - yScale(d.min),
+                    stroke: '#000'
                 }
             });
+
+        // appGroup.append('text')
+        //     .text(function(d) {
+        //         return 'Min '; //+ d.min
+        //     })
+        //     .attrs(function (d) {
+        //         return {
+        //             x: xAxisScale(d.id) + barWidth / 2 + 5,
+        //             y: height - yScale(d.min),
+        //             'font-size' : '0.6em',
+        //             fill: '#000'
+        //         }
+        //     });
+
+        //Max marker
+        appGroup.append('line')
+            .attrs(function (d) {
+                return {
+                    x1: xAxisScale(d.id) - barWidth / 2,
+                    x2: xAxisScale(d.id) + barWidth / 2,
+                    y1: height - yScale(d.max),
+                    y2: height - yScale(d.max),
+                    stroke: '#000'
+                }
+            });
+
+        // appGroup.append('text')
+        //     .text(function(d) {
+        //         return 'Max '; //+ d.min
+        //     })
+        //     .attrs(function (d) {
+        //         return {
+        //             x: xAxisScale(d.id) + barWidth / 2 + 5,
+        //             y: height - yScale(d.max),
+        //             'font-size' : '0.6em',
+        //             fill: '#000'
+        //         }
+        //     });
+
     }
 
     //Define key function, to be used when binding data
@@ -291,8 +293,8 @@ var algenBoxPlots = function () {
         return {
             median: median,
 
-            q1: q1?q1:0 ,
-            q3: q3?q3:0,
+            q1: q1 ? q1:0 ,
+            q3: q3 ? q3:0,
 
             min: data[0],
             max: data[data.length-1]
@@ -321,8 +323,8 @@ var algenBoxPlots = function () {
 
     return {
         normalizeData: normalizeData,
-        remove: removeBoxPlots,
-        render: renderBoxPlots,
-        update: updateBoxPlots
+        remove: remove,
+        init: init,
+        render: render
     };
 }();

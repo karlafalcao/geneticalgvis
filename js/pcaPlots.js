@@ -1,3 +1,28 @@
+/*
+*
+* Given a set of points in Euclidean space, the first principal component corresponds
+ to a line that passes through the multidimensional mean and minimizes the sum of
+ squares of the distances of the points from the line. The second principal component
+ corresponds to the same concept after all correlation with the first principal
+ component has been subtracted from the points. The singular values (in Σ) are the
+ square roots of the eigenvalues of the matrix XTX. Each eigenvalue is proportional
+ to the portion of the "variance" (more correctly of the sum of the squared distances
+ of the points from their multidimensional mean) that is correlated with each
+ eigenvector. The sum of all the eigenvalues is equal to the sum of the squared
+ distances of the points from their multidimensional mean. PCA essentially rotates the
+ set of points around their mean in order to align with the principal components. This
+ moves as much of the variance as possible (using an orthogonal transformation) into
+ the first few dimensions. The values in the remaining dimensions, therefore, tend to
+ be small and may be dropped with minimal loss of information (see below). PCA is often
+ used in this manner for dimensionality reduction. PCA has the distinction of being the
+ optimal orthogonal transformation for keeping the subspace that has largest "variance"
+ (as defined above). This advantage, however, comes at the price of greater
+ computational requirements if compared, for example and when applicable, to the
+ discrete cosine transform, and in particular to the DCT-II which is simply known as
+ the "DCT". Nonlinear dimensionality reduction techniques tend to be more
+ computationally demanding than PCA.
+* */
+
 var pcaPlots = function () {
     var margin = {top: 20, right: 20, bottom: 20, left: 30};
     var width = 500 - margin.left - margin.right;
@@ -19,10 +44,11 @@ var pcaPlots = function () {
 
     var dataset;
     var testes;
+    var svg;
 
-    function renderPcaPlots() {
+    function init() {
         //Create SVG element
-        var svgContainer = d3.select('body')
+        var svgContainer = d3.select('#main')
             .append('svg')
             .attr('id', '#pca-plots')
             .attr('width', width + margin.left + margin.right)
@@ -65,7 +91,7 @@ var pcaPlots = function () {
 
     }
 
-    function updatePcaPlots() {
+    function render() {
 
 		//
         svg.selectAll("circle.dot-component")
@@ -155,15 +181,6 @@ var pcaPlots = function () {
             }, item));
         });
 
-        //dataset = [
-        //    {"component":"Algoritmo 1","Teste 1":12,"Teste 2":0,"Teste 3":2,"Teste 4":16,"Teste 5":25,"Teste 6":1},
-        //    {"component":"Algoritmo 2","Teste 1":34,"Teste 2":13,"Teste 3":9,"Teste 4":8,"Teste 5":13,"Teste 6":10},
-        //    {"component":"Algoritmo 3","Teste 1":4,"Teste 2":8,"Teste 3":1,"Teste 4":1,"Teste 5":3,"Teste 6":8},
-        //    {"component":"Algoritmo 4","Teste 1":9,"Teste 2":0,"Teste 3":7,"Teste 4":0,"Teste 5":3,"Teste 6":3},
-        //    {"component":"Algoritmo 5","Teste 1":44,"Teste 2":50,"Teste 3":47,"Teste 4":47,"Teste 5":50,"Teste 6":50},
-        //    {"component":"Algoritmo 6","Teste 1":0,"Teste 2":9,"Teste 3":0,"Teste 4":0,"Teste 5":10,"Teste 6":0}
-        //];
-
         var pc = getPCFromSVD(dataset);
         console.log(pc);
 
@@ -189,7 +206,7 @@ var pcaPlots = function () {
 
     return {
         normalizedData: normalizedData,
-        render: renderPcaPlots,
-        update: updatePcaPlots
+        init: init,
+        render: render
     };
 }();
