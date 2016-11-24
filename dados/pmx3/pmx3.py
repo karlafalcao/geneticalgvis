@@ -12,10 +12,10 @@ NUM_DAMAS		= 8
 PRO_RECOMB		= 0.9
 PRO_MUTACAO		= 0.9
 
-TAM_POPULACAO	= 50
+TAM_POPULACAO	= 20
 
 MIN_FITNESS		= 1
-MAX_AVALIACOES	= 500
+MAX_AVALIACOES	= 250
 
 NUM_TESTES		= 30
 
@@ -655,15 +655,14 @@ def show(populacao, ger):
 
 def avaliation(num_testes):
 
-	
 	for i in range(num_testes):
 		convergencias = 0
 		itr_converg = []
 		qtd_convergidos = []
 		fitness_med = []
-		ofile  = open('pmx_b'+str(i)+'.csv', "w", newline='')
+		ofile  = open('teste'+str(i)+'.csv', "w", newline='')
 		writer = csv.writer(ofile)
-		writer.writerow(['config','fitness'])
+		#writer.writerow(['config','fitness'])
 		print("Teste " + str(i + 1))
 
 		(it_converg, total_converg, fit_medio) = main(False, writer)
@@ -675,15 +674,15 @@ def avaliation(num_testes):
 		fitness_med.append(fit_medio)
 		ofile.close()
 
-		ofile  = open('info_pmx_b'+str(i)+'.csv', "w", newline='')
+		ofile  = open('info'+str(i)+'.csv', "w", newline='')
 		writer = csv.writer(ofile)
-		writer.writerow(('dado','valor'))
-		writer.writerow(('populacao', TAM_POPULACAO))
-		writer.writerow(('total_converg', total_converg))
-		writer.writerow(('it_converg', it_converg))
+		writer.writerow((TAM_POPULACAO,total_converg,it_converg,"%.3f" % fit_medio))
+		#writer.writerow(('dado','valor'))
+		#writer.writerow(('populacao', TAM_POPULACAO))
+		#writer.writerow(('total_converg', total_converg))
+		#writer.writerow(('it_converg', it_converg))
 		#writer.writerow(('mdconvergidos', statistics.mean(qtd_convergidos)))
-		writer.writerow(('fitmedio', ("%.3f" % fit_medio)))
-
+		#writer.writerow(('fitmedio', ("%.3f" % fit_medio)))
 		#print("DESVIO PADRAO DAS ITERACOES:      " + str(statistics.stdev(itr_converg)))
 		#print("MEDIA DE CONVERGIDOS POR TESTE:   " + str(statistics.mean(qtd_convergidos)))
 		#print("DESVIO PADRAO DOS CONVERGIDOS:    " + str(statistics.stdev(qtd_convergidos)))
