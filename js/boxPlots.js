@@ -260,8 +260,6 @@ var boxPlots = function () {
             variances.sort(function(){return arguments[0] - arguments[1]});
             var boxPlotValues = getBoxPlotValues(variances);
 
-            console.log(boxPlotValues);
-
             var mapValue = Object.assign({}, {
                 key: i,
                 id: i+1,
@@ -293,8 +291,8 @@ var boxPlots = function () {
         return {
             median: median,
 
-            q1: q1 ? q1:0 ,
-            q3: q3 ? q3:0,
+            q1: q1 ? q1 : 0,
+            q3: q3 ? q3 : 0,
 
             min: data[0],
             max: data[data.length-1]

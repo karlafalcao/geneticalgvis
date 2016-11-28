@@ -1,6 +1,7 @@
 /*
 *
-* Given a set of points in Euclidean space, the first principal component corresponds
+* 
+Given a set of points in Euclidean space, the first principal component corresponds
  to a line that passes through the multidimensional mean and minimizes the sum of
  squares of the distances of the points from the line. The second principal component
  corresponds to the same concept after all correlation with the first principal
@@ -8,7 +9,8 @@
  square roots of the eigenvalues of the matrix XTX. Each eigenvalue is proportional
  to the portion of the "variance" (more correctly of the sum of the squared distances
  of the points from their multidimensional mean) that is correlated with each
- eigenvector. The sum of all the eigenvalues is equal to the sum of the squared
+ eigenvector. 
+ The sum of all the eigenvalues is equal to the sum of the squared
  distances of the points from their multidimensional mean. PCA essentially rotates the
  set of points around their mean in order to align with the principal components. This
  moves as much of the variance as possible (using an orthogonal transformation) into
@@ -150,7 +152,7 @@ var pcaPlots = function () {
         var matrix = dataset.map(function(d){
             return d3.values(d).slice(1,d.length).map(parseFloat);
         });
-        console.log(matrix);
+        // console.log(matrix);
         //Transpose to get PCA from transposed attrs
         matrix = d3.transpose(matrix);
 
@@ -173,16 +175,16 @@ var pcaPlots = function () {
             var item = {};
 
             algorithmData.forEach(function(teste, testeIndex){
-                item['Teste '+ testeIndex] = teste['info']['total_converg'];
+                item['Teste '+ testeIndex] = teste['info']['total_cenverg'];
             });
-            console.log(item);
+            // console.log(item);
             dataset.push(Object.assign({
                 component: algorithm
             }, item));
         });
 
         var pc = getPCFromSVD(dataset);
-        console.log(pc);
+        // console.log(pc);
 
         var samples = Object.keys(dataset[0]);  // key values
         samples.shift(); // drop the first column label, e.g. "component"
