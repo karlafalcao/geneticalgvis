@@ -5,7 +5,8 @@
   "main": "index.js",
   "dependencies": {
     "d3": "^4.4.0",
-    "jsonfile": "^2.4.0"
+    "jsonfile": "^2.4.0",
+    "ml-hclust": "^1.2.0"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
