@@ -3,8 +3,8 @@ var boxPlots = function () {
     var margin = {top: 20, right: 80, bottom: 30, left: 50};
 
     //Width and height
-    var width = 800 - margin.left - margin.right;
-    var height = 400 - margin.top - margin.bottom;
+    var width = 600 - margin.left - margin.right;
+    var height = 300 - margin.top - margin.bottom;
 
     //Update scale domains
     var barWidth = 40;
@@ -78,7 +78,7 @@ var boxPlots = function () {
                 'font-size' : '1em',
                 fill: '#000'
             })
-            .text('Variancias das iterações');
+            .text('Variância do fitness');
 
     }
 

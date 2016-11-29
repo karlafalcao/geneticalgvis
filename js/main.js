@@ -21,6 +21,16 @@ var selectedAlgorithm = '0';
             boxPlots.normalizeData(dataset[selectedAlgorithm]);
             boxPlots.render();
 
+            document.getElementById('#tree').remove();
+
+            treePlot.normalizeData(dataset[selectedAlgorithm]);
+            treePlot.init();
+
+            document.getElementById('#radial-tree').remove();
+
+            radialTreePlot.normalizeData(dataset[selectedAlgorithm]);
+            radialTreePlot.init();
+
         });
     }
 
@@ -95,7 +105,7 @@ var selectedAlgorithm = '0';
 
         boxPlots.render();
 
-        pcaPlots.render();
+        // pcaPlots.render();
 
         //#end
     }
@@ -106,12 +116,15 @@ var selectedAlgorithm = '0';
         boxPlots.normalizeData(dataset[selectedAlgorithm]);
         boxPlots.init();
 
-        // PCA
-        pcaPlots.normalizedData(dataset);
-        pcaPlots.init();
+        treePlot.normalizeData(dataset[selectedAlgorithm]);
+        treePlot.init();
 
-        tree.normalizeData(dataset[selectedAlgorithm]);
-        tree.init();
+        radialTreePlot.normalizeData(dataset[selectedAlgorithm]);
+        radialTreePlot.init();
+
+        // PCA
+        // pcaPlots.normalizedData(dataset);
+        // pcaPlots.init();
     }
 
     function init() {

@@ -11,6 +11,7 @@
 
     <link rel="stylesheet" href="css/normalize.css">
     <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/helpers.css">
     <script src="js/vendor/modernizr-2.8.3.min.js"></script>
 </head>
 
@@ -18,6 +19,55 @@
     <div id="main">
         <h2>Visualização de algoritmos genéticos</h2>
         <h3>Problema das 8 Rainhas</h3>
+        <article>
+            <section>
+                <h4>PMX1</h4>
+                <ul>
+                    <li>Seleção de Pais: Torneio Simples</li>
+                    <li>Recombinação: PMX</li>
+                    <li>Mutação: Insertion</li>
+                    <li>Seleção de Sobreviventes: Elitismo</li>
+                </ul>    
+            </section>
+            
+            <section>
+                <h4>A) PMX2</h4>
+                <ul>
+                    <li>Seleção de Sobreviventes: Replace Worst</li>
+                </ul>
+                        
+            </section>
+            
+            <section>
+                <h4>B) PMX3</h4>
+                <ul>
+                    <li>Mutação: Swap</li>
+                </ul>
+               
+            </section>
+            
+            <section>
+                <h4>C) PMX4</h4>
+                <ul>
+                    <li>Mutação: Inversion </li>
+                </ul>
+            </section>
+            
+            <section>
+                <h4>D) PMX5</h4>
+                <ul>
+                    <li>Seleção de Pais: Torneio</li>
+                </ul>
+            </section>
+            
+            <section>
+                <h4>E) PMX6</h4>
+                <ul>
+                    <li>Seleção de Pais: Roleta  </li>
+                </ul>
+            </section>
+        </article>
+
 
         <select id="alg-select">
             <option value="0" selected>PMX1</option>
@@ -47,6 +97,7 @@
     <script src="js/pcaPlots.js"></script>
 
     <script src="js/tree.js"></script>
+    <script src="js/radialTree.js"></script>
     <!-- main -->
     <script src="js/main.js"></script>
 </body>
