@@ -137,3 +137,15 @@ svg text {
     stroke-opacity: 0.4;
     stroke-width: 1.5px;
 }
+
+
+.area {
+    fill: steelblue;
+    clip-path: url(#clip);
+}
+
+.zoom {
+    cursor: move;
+    fill: none;
+    pointer-events: all;
+}

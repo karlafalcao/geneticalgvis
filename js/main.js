@@ -2,13 +2,11 @@ var algorithms = ['pmx1', 'pmx2', 'pmx3', 'pmx4', 'pmx5', 'pmx6'];
 var testeQty = 10;
 var selectedAlgorithm = '0';
 !function(){
-    //boxplots functions factory
     var dataset;
-
     // Object -> Object
     var parseInfo = R.map(parseFloat);
-    var parseFitness = R.map(parseFloat, R.prop('fitness'));
-
+    var getFitness = R.compose(parseFloat, R.prop('fitness'));
+    var parseFitness = R.map(getFitness);
 
     function subscribeSelection () {
         var selVal = document.getElementById('alg-select');
@@ -16,20 +14,13 @@ var selectedAlgorithm = '0';
         selVal.addEventListener('change', function(e) {
             selectedAlgorithm = this.value;
 
-            boxPlots.remove();
+            document.getElementById('boxes1').remove();
+            document.getElementById('tree1').remove();
+            document.getElementById('radialTree1').remove();
+            document.getElementById('areas1').remove();
+            document.getElementById('bars1').remove();
 
-            boxPlots.normalizeData(dataset[selectedAlgorithm]);
-            boxPlots.render();
-
-            document.getElementById('#tree').remove();
-
-            treePlot.normalizeData(dataset[selectedAlgorithm]);
-            treePlot.init();
-
-            document.getElementById('#radial-tree').remove();
-
-            radialTreePlot.normalizeData(dataset[selectedAlgorithm]);
-            radialTreePlot.init();
+            renderDataset();
 
         });
     }
@@ -75,7 +66,7 @@ var selectedAlgorithm = '0';
                     var gen = R.slice(0, population, gensInTest);
                     gensInTest = R.remove(0, population, gensInTest);
 
-                    item.fitness[i] = gen.map(function(sample){ return parseFloat(sample.fitness); });
+                    item.fitness[i] = parseFitness(gen);
                     item.variances[i] =  d3.variance( item.fitness[i] );
 
                     return gen;
@@ -101,34 +92,34 @@ var selectedAlgorithm = '0';
         return Promise.all(promiseList);
     }
 
-    function renderDataset(){
-
-        boxPlots.render();
-
-        // pcaPlots.render();
-
-        //#end
-    }
-
-    function loadDataset() {
+    function renderDataset() {
 
         // Box Plot
-        boxPlots.normalizeData(dataset[selectedAlgorithm]);
-        boxPlots.init();
+        var myBoxes = boxPlots('boxes1');
+        myBoxes.render(myBoxes.normalizeData(dataset[selectedAlgorithm]));
 
-        var mybarsPlot = barsPlot()
-        // mybarsPlot.render(dataset[selectedAlgorithm]);
+        //
+        var myTree = treePlot('tree1');
+        var treeData = myTree.normalizeData(dataset[selectedAlgorithm]);
+        myTree.render(treeData);
+
+        var myRadialTree = radialTreePlot('radialTree1');
+        myRadialTree.render(myRadialTree.normalizeData(dataset[selectedAlgorithm]));
+
+        //
+        var mybarsPlot = barsPlot('bars1');
         mybarsPlot.render(barsData);
 
-        treePlot.normalizeData(dataset[selectedAlgorithm]);
-        treePlot.init();
-
-        radialTreePlot.normalizeData(dataset[selectedAlgorithm]);
-        radialTreePlot.init();
+        //
+        var myAreas = areasPlot('areas1');
+        myAreas.render();
 
         // PCA
         // pcaPlots.normalizedData(dataset);
         // pcaPlots.init();
+
+        subscribeSelection();
+        //#end
     }
 
     function init() {
@@ -138,11 +129,9 @@ var selectedAlgorithm = '0';
                 dataset = data;
                 console.log(data);
                 //document.body.textContent = JSON.stringify(data);
-                loadDataset();
+
                 //render
                 renderDataset();
-
-                subscribeSelection();
 
             });
     }

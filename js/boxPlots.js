@@ -1,5 +1,4 @@
-var boxPlots = function () {
-    var svg;
+var boxPlots = function (svgContainerId) {
     var margin = {top: 20, right: 80, bottom: 30, left: 50};
 
     //Width and height
@@ -16,77 +15,70 @@ var boxPlots = function () {
         yAxisScale;
 
     var dateBarColor = '#ccc';
-    var dataset;
 
-    function init() {
-        //Create SVG element
-        var svgContainer = d3.select('#main')
-            .append('svg')
-            .attr('id', '#boxplots')
-            .attr('width', width + margin.left + margin.right)
-            .attr('height', height + margin.top + margin.bottom);
+    //Create SVG element
+    var svgContainer = d3.select('#main')
+        .append('svg')
+        .attr('id', svgContainerId)
+        .attr('width', width + margin.left + margin.right)
+        .attr('height', height + margin.top + margin.bottom);
 
-        svg = svgContainer.append('g')
-            .attr('width', width)
-            .attr('height', height)
-            .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+    var svg = svgContainer.append('g')
+        .attr('width', width)
+        .attr('height', height)
+        .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
-        var xAxisElem = svg
-            .append('g')
-            .attr('id', 'boxplot-axis-x')
-            .attr('transform', 'translate(0,' + height + ')');
+    var xAxisElem = svg
+        .append('g')
+        .attr('id', 'boxplot-axis-x')
+        .attr('transform', 'translate(0,' + height + ')');
 
-        xAxisElem.append('line')
-            .attrs(function (d) {
-                return {
-                    x1: width + padding,
-                    x2: width + 2 * padding,
-                    y1: .5,
-                    y2: .5,
-                    stroke: '#000'
-                }
-            });
+    xAxisElem.append('line')
+        .attrs(function (d) {
+            return {
+                x1: width + padding,
+                x2: width + 2 * padding,
+                y1: .5,
+                y2: .5,
+                stroke: '#000'
+            }
+        });
 
-        xAxisElem.append('line')
-            .attrs(function (d) {
-                return {
-                    x1: 0,
-                    x2: padding,
-                    y1: .5,
-                    y2: .5,
-                    stroke: '#000'
-                }
-            });
+    xAxisElem.append('line')
+        .attrs(function (d) {
+            return {
+                x1: 0,
+                x2: padding,
+                y1: .5,
+                y2: .5,
+                stroke: '#000'
+            }
+        });
 
-        xAxisElem.append('text')
-            .text('Testes #'+ algorithms[selectedAlgorithm])
-            .attrs({
-                x: width/2 + 20,
-                y: 20,
-                'font-size': '1em',
-                fill: '#000'
-            });
+    xAxisElem.append('text')
+        .text('Testes #' + algorithms[selectedAlgorithm])
+        .attrs({
+            x: width/2 + 20,
+            y: 20,
+            'font-size': '1em',
+            fill: '#000'
+        });
 
 
-        svg
-            .append('g')
-            .attr('id', 'boxplot-axis-y')
-            .append('text')
-            .attrs({
-                transform: 'translate(-45, ' + (height/2 - 50) +') rotate(-90)',
-                y: 6,
-                'font-size' : '1em',
-                fill: '#000'
-            })
-            .text('Variância do fitness');
+    svg
+        .append('g')
+        .attr('id', 'boxplot-axis-y')
+        .append('text')
+        .attrs({
+            transform: 'translate(-45, ' + (height/2 - 50) +') rotate(-90)',
+            y: 6,
+            'font-size' : '1em',
+            fill: '#000'
+        })
+        .text('Variância do fitness');
 
-    }
 
-    function remove() {
-        svg.selectAll('.boxplots-group').remove();
-    }
-
-    function render() {
+    function render(dataset) {
         //scales
         xScale = d3.scaleBand().rangeRound([0, width]).padding(0);
         xScale.domain(d3.range(dataset.length));
@@ -254,7 +246,7 @@ var boxPlots = function () {
     }
 
     function normalizeData (data) {
-        dataset = data.map(function(item, i) {
+        return data.map(function(item, i) {
             var variances = item.variances;
 
             variances.sort(function(){return arguments[0] - arguments[1]});
@@ -321,8 +313,6 @@ var boxPlots = function () {
 
     return {
         normalizeData: normalizeData,
-        remove: remove,
-        init: init,
         render: render
     };
-}();
+};

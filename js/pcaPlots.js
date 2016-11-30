@@ -51,7 +51,7 @@ var pcaPlots = function () {
         //Create SVG element
         var svgContainer = d3.select('#main')
             .append('svg')
-            .attr('id', '#pca-plots')
+            .attr('id', 'pca-plots')
             .attr('width', width + margin.left + margin.right)
             .attr('height', height + margin.top + margin.bottom);
 

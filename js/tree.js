@@ -1,44 +1,27 @@
-var treePlot = function() {
+var treePlot = function(svgContainerId) {
     var line = d3.line()
         .x(function(d) { return d.x; })
         .y(function(d) { return d.y; })
         .curve(d3.curveLinear);
     
     var margin = {top: 20, right: 120, bottom: 20, left: 120},
-        width = 2000 - margin.right - margin.left,
+        width = 1920 - margin.right - margin.left,
         height = 500 - margin.top - margin.bottom;
 
-    var svg, tree,
-        i = 0,
-        duration = 0,
+    var i = 0,
+        duration = 0.25,
         root;
 
-    var nodes,
-            links;
-     var treeData = {
-            "name": "Top Level",
-            "parent": "null",
-            "children": [
-                {
-                    "name": "Level 2: A",
-                    "parent": "Top Level",
-                    "children": [
-                        {
-                            "name": "Son of A",
-                            "parent": "Level 2: A"
-                        },
-                        {
-                            "name": "Daughter of A",
-                            "parent": "Level 2: A"
-                        }
-                    ]
-                },
-                {
-                    "name": "Level 2: B",
-                    "parent": "Top Level"
-                }
-            ]
-        };
+    var svg = d3.select('#main')
+        .append('svg')
+        .attr("id", svgContainerId)
+        .attr("width", width + margin.right + margin.left)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    var tree = d3.tree()
+        .size([height, width]);
 
     function diagonal(d) {
         return "M" + d.source.y + "," + d.source.x
@@ -47,128 +30,111 @@ var treePlot = function() {
             + " " + d.target.y + "," + d.target.x;
     }
 
-    var stratify = d3.stratify()
-        .parentId(function(d) { return d.substring(0, d.lastIndexOf(".")); });
-
     var burrow = function(table) {
-      // create nested object
-      var obj = {};
-      table.forEach(function(row) {
+        // create nested object
+        var obj = {};
+        table.forEach(function(row) {
         // start at root
         var layer = obj;
 
         // create children as nested objects
         row.taxonomy.forEach(function(key) {
-          layer[key] = key in layer ? layer[key] : {};
-          layer = layer[key];
+            layer[key] = key in layer ? layer[key] : {};
+            layer = layer[key];
         });
       });
 
-      // recursively create children array
-      var descend = function(obj, depth) {
-        var arr = [];
-        var depth = depth || 0;
-        for (var k in obj) {
-          var child = {
-            name: k,
-            depth: depth,
-            children: descend(obj[k], depth+1)
-          };
-          arr.push(child);
-        }
-        return arr;
-      };
+        // recursively create children array
+        var descend = function(obj, depth) {
+            var arr = [];
+            var depth = depth || 0;
+            for (var k in obj) {
 
-      // use descend to create nested children arrys
-      return {
-        name: "root",
-        children: descend(obj, 1),
-        depth: 0
-      }
+            var child = {
+                    name: k,
+                    depth: depth,
+                    children: descend(obj[k], depth+1)
+                };
+                arr.push(child);
+            }
+            return arr;
+        };
+
+          // use descend to create nested children arrys
+        return {
+            name: "root",
+            children: descend(obj, 1),
+            depth: 0
+        };
+
     };
 
-    function normalizeData(data) {
-        console.log(data);
-        var tree = []
-        var teste1 = data[0];
-
-        var reversedGens = teste1.gens.reverse();
+    function generateTreeData(data) {
+        var treeData = [];
+        var reversedGens = data.reverse();
 
         //TODO: transpose and reduce
         reversedGens.forEach(function(gen, genIndex) {
-            
+
             gen.forEach( function(indiv, indivIndex) {
-                
+
                 if (genIndex > 0) {
                     var prevGen = reversedGens[genIndex-1];
                     var prevIndiv = prevGen[indivIndex];
-                    
+
                     if (prevIndiv.fitness === indiv.fitness) {
-                        return; 
+                        return;
                     }
                 }
 
-                if (!tree[indivIndex]) {
-                    tree[indivIndex] = {};
-                    tree[indivIndex].taxonomy = []
+                if (!treeData[indivIndex]) {
+                    treeData[indivIndex] = {};
+                    treeData[indivIndex].taxonomy = []
                 }
 
-                tree[indivIndex].taxonomy.push(indiv.config);
+                treeData[indivIndex].taxonomy.push(indiv.config);
             });
-
 
         });
 
-        console.log(tree);
-        
-        treeData = burrow(tree);
+        return treeData;
     }
 
-    function init () {
+    function normalizeData(data) {
+        var teste1 = data[0];
 
-        svg = d3.select('#main')
-            .append('svg')
-            .attr("id", '#tree')
-            .attr("width", width + margin.right + margin.left)
-            .attr("height", height + margin.top + margin.bottom)
-            .append("g")
-            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+        //var allTests = data.reduce(function(prev, curr) {
+        //    return prev.concat(curr.gens);
+        //}, []);
 
+        var treeData = generateTreeData(teste1.gens);
 
-        tree = d3.tree()
-            .size([height, width]);
-
-        root = d3.hierarchy(treeData);
+        root = d3.hierarchy(burrow(treeData));
         root.x0 = height / 2;
         root.y0 = 0;
 
-        nodes = root.descendants(),
-            links = root.links();
-        tree(root);
-
-        render(root, nodes, links);
-
-        d3.select(self.frameElement).style("height", height + margin.top + margin.bottom + "px");
-        d3.select(self.frameElement).style("width", width + margin.top + margin.bottom + "px");
+        return root;
     }
 
-    function remove() {
-        svg.remove();
-    }
-
-    function render (source, nodes, links) {
+    function render (root) {
+        console.log(root);
         // Compute the new tree layout.
-
+        tree(root);
+        var nodes = root.descendants(),
+            links = root.links();
 
         // Normalize for fixed-depth.
         nodes.forEach(function(d) { d.y = d.depth * 120; });
 
-        // Update the nodes…
-        var node = svg.selectAll("g.node")
+        // Update the nodes...
+        var node = svg
+            .selectAll("g.node")
             .data(nodes, function(d) { return d.id || (d.id = ++i); });
 
         // Enter any new nodes at the parent's previous position.
-        var nodeEnter = node.enter().append("g")
+        var nodeEnter = node
+            .enter()
+            .append("g")
             .attr("class", "node")
             .attr("class", function(d) {
                 return "node" + (d.children ? " node--internal" : " node--leaf");
@@ -176,19 +142,22 @@ var treePlot = function() {
             .attr("transform", function(d) { return "translate(" + d.y + "," + d.x + ")"; })
             .on("click", click);
 
-        nodeEnter.append("circle")
+        nodeEnter
+            .append("circle")
             .attr("r", 5)
             .style("fill", function(d) { return d.children ? "lightsteelblue" : "#fff"; });
 
-        nodeEnter.append("text")
-            .attr("x", function(d) { return d.children ? -13 : 13; })
+        nodeEnter
+            .append("text")
+            .attr("x", function(d) { return d.children ? -8 : 8; })
             .attr("dy", ".35em")
             .attr("text-anchor", function(d) { return d.children ? "end" : "start"; })
             .text(function(d) { return d.data.name; })
             .style("fill-opacity", 1);
 
-        // Transition nodes to their new position.
-        var nodeUpdate = node.transition()
+        // Update
+        var nodeUpdate = node
+            .transition()
             .duration(duration)
             .attr("transform", function(d) { return "translate(" + d.y + "," + d.x + ")"; });
 
@@ -199,10 +168,10 @@ var treePlot = function() {
         nodeUpdate.select("text")
             .style("fill-opacity", 1);
 
-        // Transition exiting nodes to the parent's new position.
+        //Exit
         var nodeExit = node.exit().transition()
             .duration(duration)
-            .attr("transform", function(d) { return "translate(" + source.y + "," + source.x + ")"; })
+            .attr("transform", function(d) { return "translate(" + root.y + "," + root.x + ")"; })
             .remove();
 
         nodeExit.select("circle")
@@ -211,25 +180,27 @@ var treePlot = function() {
         nodeExit.select("text")
             .style("fill-opacity", 1e-6);
 
-        // Update the links…
-        var link = svg.selectAll("path.link")
+        var link = svg
+            .selectAll("path.link")
             .data(links, function(d) { return d.target.id; });
 
-        // Enter any new links at the parent's previous position.
-        link.enter().insert("path", "g")
+        // Enter
+        link
+            .enter()
+            .insert("path", "g")
             .attr("class", "link")
             .attr("d", function(d) {
-                   // var o = {x: source.x0, y: source.y0};
+                   // var o = {x: root.x0, y: root.y0};
                    // return diagonal({source: o, target: o});
                 return diagonal(d);
             });
 
-        // Transition links to their new position.
+        // Update
         link.transition()
             .duration(duration)
             .attr("d", diagonal);
 
-        // Transition exiting nodes to the parent's new position.
+        // Exit
         link.exit().transition()
             .duration(duration)
             .attr("d", function(d) {
@@ -239,35 +210,13 @@ var treePlot = function() {
             })
             .remove();
 
-        // Stash the old positions for transition.
-        // nodes.forEach(function(d) {
-        //     d.x0 = d.x;
-        //     d.y0 = d.y;
-        // });
+        nodes.forEach(function(d) {
+             d.x0 = d.x;
+             d.y0 = d.y;
+        });
 
-
-        var link = svg.selectAll(".link")
-            .data(links)
-            .enter().append("path")
-            .attr("class", "link")
-            .attr("d", diagonal);
-
-        var node = svg.selectAll(".node")
-            .data(nodes)
-            .enter().append("g")
-            .attr("class", function(d) {
-                return "node" + (d.children ? " node--internal" : " node--leaf");
-            })
-            .attr("transform", function(d) { return "translate(" + d.y + "," + d.x + ")"; });
-
-        node.append("circle")
-            .attr("r", 2);
-
-        node.append("text")
-            .attr("dy", 2)
-            .attr("x", function(d) { return d.children ? -8 : 8; })
-            .style("text-anchor", function(d) { return d.children ? "end" : "start"; })
-            .text(function(d) { return d.data.name; });
+        d3.select(self.frameElement).style("height", height + margin.top + margin.bottom + "px");
+        d3.select(self.frameElement).style("width", width + margin.top + margin.bottom + "px");
     }
 
     // Toggle children on click.
@@ -283,9 +232,7 @@ var treePlot = function() {
     }
 
     return {
-        init: init,
-        remove: remove,
         normalizeData: normalizeData,
         render: render
     }
-}();
+};
