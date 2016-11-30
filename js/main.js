@@ -116,6 +116,10 @@ var selectedAlgorithm = '0';
         boxPlots.normalizeData(dataset[selectedAlgorithm]);
         boxPlots.init();
 
+        var mybarsPlot = barsPlot()
+        // mybarsPlot.render(dataset[selectedAlgorithm]);
+        mybarsPlot.render(barsData);
+
         treePlot.normalizeData(dataset[selectedAlgorithm]);
         treePlot.init();
 

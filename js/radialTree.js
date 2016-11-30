@@ -7,7 +7,7 @@ var radialTreePlot = function() {
     var margin = {top: 20, right: 120, bottom: 20, left: 120},
         width = 960 - margin.right - margin.left,
         height = 500 - margin.top - margin.bottom,
-        radius = 250;
+        radius = 550;
 
     var svg, tree,
         i = 0,
@@ -187,12 +187,12 @@ var radialTreePlot = function() {
           node.append("circle")
               .attr("r", 2.5);
 
-          node.append("text")
-              .attr("dy", ".31em")
-              .attr("x", function(d) { return d.x < 180 === !d.children ? 6 : -6; })
-              .style("text-anchor", function(d) { return d.x < 180 === !d.children ? "start" : "end"; })
-              .attr("transform", function(d) { return "rotate(" + (d.x < 180 ? d.x - 90 : d.x + 90) + ")"; })
-              .text(function(d) { return d.data.name; });
+          // node.append("text")
+          //     .attr("dy", ".31em")
+          //     .attr("x", function(d) { return d.x < 180 === !d.children ? 6 : -6; })
+          //     .style("text-anchor", function(d) { return d.x < 180 === !d.children ? "start" : "end"; })
+          //     .attr("transform", function(d) { return "rotate(" + (d.x < 180 ? d.x - 90 : d.x + 90) + ")"; })
+          //     .text(function(d) { return d.data.name; });
 
         d3.select(self.frameElement).style("height", height + margin.top + margin.bottom + "px");
     }
@@ -228,12 +228,12 @@ var radialTreePlot = function() {
             .attr("r", 5)
             .style("fill", function(d) { return d.children ? "lightsteelblue" : "#fff"; });
 
-        nodeEnter.append("text")
-            .attr("x", function(d) { return d.children ? -13 : 13; })
-            .attr("dy", ".35em")
-            .attr("text-anchor", function(d) { return d.children ? "end" : "start"; })
-            .text(function(d) { return d.data.name; })
-            .style("fill-opacity", 1);
+        // nodeEnter.append("text")
+        //     .attr("x", function(d) { return d.children ? -13 : 13; })
+        //     .attr("dy", ".35em")
+        //     .attr("text-anchor", function(d) { return d.children ? "end" : "start"; })
+        //     .text(function(d) { return d.data.name; })
+        //     .style("fill-opacity", 1);
 
         // Transition nodes to their new position.
         var nodeUpdate = node.transition()
@@ -244,8 +244,8 @@ var radialTreePlot = function() {
             .attr("r", 5)
             .style("fill", function(d) { return d.children ? "lightsteelblue" : "#fff"; });
 
-        nodeUpdate.select("text")
-            .style("fill-opacity", 1);
+        // nodeUpdate.select("text")
+        //     .style("fill-opacity", 1);
 
         // Transition exiting nodes to the parent's new position.
         var nodeExit = node.exit().transition()
@@ -256,8 +256,8 @@ var radialTreePlot = function() {
         nodeExit.select("circle")
             .attr("r", 1e-6);
 
-        nodeExit.select("text")
-            .style("fill-opacity", 1e-6);
+        // nodeExit.select("text")
+        //     .style("fill-opacity", 1e-6);
 
         // Update the links…
         var link = svg.selectAll("path.link")
@@ -311,11 +311,11 @@ var radialTreePlot = function() {
         node.append("circle")
             .attr("r", 2.5);
 
-        node.append("text")
-            .attr("dy", 3)
-            .attr("x", function(d) { return d.children ? -8 : 8; })
-            .style("text-anchor", function(d) { return d.children ? "end" : "start"; })
-            .text(function(d) { return d.data.name; });
+        // node.append("text")
+        //     .attr("dy", 3)
+        //     .attr("x", function(d) { return d.children ? -8 : 8; })
+        //     .style("text-anchor", function(d) { return d.children ? "end" : "start"; })
+        //     .text(function(d) { return d.data.name; });
     }
     function project(x, y) {
       var angle = (x - 90) / 180 * Math.PI, radius = y;

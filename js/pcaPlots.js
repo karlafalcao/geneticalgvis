@@ -32,8 +32,7 @@ var pcaPlots = function () {
     var angle = Math.PI * 0;
     
     var color = d3.scaleOrdinal()
-        .range(d3.schemeCategory10
-        .map(function(c) { c = d3.rgb(c); c.opacity = 0.6; return c; }));
+        .range(d3.schemeCategory10.map(function(c) { c = d3.rgb(c); c.opacity = 0.6; return c; }));
 
     var x = d3.scaleLinear().range([width, 0]); // switch to match how R biplot shows it
     var y = d3.scaleLinear().range([height, 0]);

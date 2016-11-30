@@ -12,6 +12,9 @@ var treePlot = function() {
         i = 0,
         duration = 0,
         root;
+
+    var nodes,
+            links;
      var treeData = {
             "name": "Top Level",
             "parent": "null",
@@ -100,41 +103,24 @@ var treePlot = function() {
                     var prevGen = reversedGens[genIndex-1];
                     var prevIndiv = prevGen[indivIndex];
                     
-                    if (prevIndiv.config === indiv.config || prevIndiv.fitness === indiv.fitness) {
+                    if (prevIndiv.fitness === indiv.fitness) {
                         return; 
                     }
                 }
 
                 if (!tree[indivIndex]) {
-                    tree[indivIndex] = '';
+                    tree[indivIndex] = {};
+                    tree[indivIndex].taxonomy = []
                 }
 
-                // if (tree.indexOf(tree[indivIndex] + indiv.config) === -1 && tree[indivIndex]) {
-                //     tree.push(tree[indivIndex] + indiv.config);
-                // }
-                
-                tree[indivIndex] += indiv.config + '.';
+                tree[indivIndex].taxonomy.push(indiv.config);
             });
 
 
         });
 
-        tree = tree.map(function(path) {
-            var shouldRemove = R.compose(R.equals(R.length(path) - 1), R.lastIndexOf('.'));
-            if(shouldRemove(path)) {
-                path = R.dropLast(1, path);
-            }
-            return {
-                path: path
-            };
-        });
-
         console.log(tree);
         
-        tree.forEach(function(row) {
-            row.taxonomy = row.path.split(".");
-        });
-
         treeData = burrow(tree);
     }
 
@@ -155,7 +141,12 @@ var treePlot = function() {
         root = d3.hierarchy(treeData);
         root.x0 = height / 2;
         root.y0 = 0;
-        render(root);
+
+        nodes = root.descendants(),
+            links = root.links();
+        tree(root);
+
+        render(root, nodes, links);
 
         d3.select(self.frameElement).style("height", height + margin.top + margin.bottom + "px");
         d3.select(self.frameElement).style("width", width + margin.top + margin.bottom + "px");
@@ -165,12 +156,9 @@ var treePlot = function() {
         svg.remove();
     }
 
-    function render (source) {
+    function render (source, nodes, links) {
         // Compute the new tree layout.
-        var nodes = source.descendants(),
-            links = source.links();
 
-        tree(source);
 
         // Normalize for fixed-depth.
         nodes.forEach(function(d) { d.y = d.depth * 120; });
@@ -252,10 +240,10 @@ var treePlot = function() {
             .remove();
 
         // Stash the old positions for transition.
-        nodes.forEach(function(d) {
-            d.x0 = d.x;
-            d.y0 = d.y;
-        });
+        // nodes.forEach(function(d) {
+        //     d.x0 = d.x;
+        //     d.y0 = d.y;
+        // });
 
 
         var link = svg.selectAll(".link")
