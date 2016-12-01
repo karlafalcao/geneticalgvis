@@ -68,7 +68,6 @@ var barsPlot = function (svgContainerId) {
         // }
     }
 
-    var backGens
     function normalizeData(data) {
         var teste1 = data[0];
 
