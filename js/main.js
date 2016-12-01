@@ -17,7 +17,6 @@ var selectedAlgorithm = '0';
             document.getElementById('boxes1').remove();
             document.getElementById('tree1').remove();
             document.getElementById('radialTree1').remove();
-            document.getElementById('areas1').remove();
             document.getElementById('bars1').remove();
 
             renderDataset();
@@ -108,6 +107,7 @@ var selectedAlgorithm = '0';
 
         //
         var mybars = barsPlot('bars1');
+        // mybars.normalizeData(dataset[selectedAlgorithm]);
         mybars.render(barsData);
 
         // PCA
