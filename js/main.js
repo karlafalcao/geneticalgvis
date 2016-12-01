@@ -107,12 +107,8 @@ var selectedAlgorithm = '0';
         myRadialTree.render(myRadialTree.normalizeData(dataset[selectedAlgorithm]));
 
         //
-        var mybarsPlot = barsPlot('bars1');
-        mybarsPlot.render(barsData);
-
-        //
-        var myAreas = areasPlot('areas1');
-        myAreas.render();
+        var mybars = barsPlot('bars1');
+        mybars.render(barsData);
 
         // PCA
         // pcaPlots.normalizedData(dataset);

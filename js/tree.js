@@ -9,7 +9,7 @@ var treePlot = function(svgContainerId) {
         height = 500 - margin.top - margin.bottom;
 
     var i = 0,
-        duration = 0.25,
+        duration = 0,
         root;
 
     var svg = d3.select('#main')
@@ -204,9 +204,9 @@ var treePlot = function(svgContainerId) {
         link.exit().transition()
             .duration(duration)
             .attr("d", function(d) {
-                // var o = {x: source.x, y: source.y};
+                // var o = {x: root.x, y: root.y};
                 // return diagonal({source: o, target: o});
-                   return diagonal(d);
+                return diagonal(d);
             })
             .remove();
 
