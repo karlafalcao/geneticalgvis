@@ -32,10 +32,10 @@ var selectedAlgorithm = '0';
         })
     }
 
-    function loadDatasetForAlgorithm(alg) {
+    function loadDatasetForAlgorithm() {
 
-        var infoData = loadCSV('dados/'+ alg + '/info.csv');
-        var gensData = loadCSV('dados/'+ alg + '/teste.csv');
+        var infoData = loadCSV('dados/pmx/info.csv');
+        var gensData = loadCSV('dados/pmx/pmx.csv');
 
         return Promise.all([
             infoData,
@@ -43,39 +43,44 @@ var selectedAlgorithm = '0';
         ]).then(function(data) {
             infoData = data[0];
             gensData = data[1];
+            var dataset = Array(6).fill().map(function (_, algIndex){
+                return Array(testeQty).fill().map(function (_, testIndex) {
+                    var item = {};
 
-            var dataset = Array(testeQty).fill().map(function (_, testIndex) {
-                var item = {};
+                    // normalize info data
+                    
+                    item.info = parseInfo( infoData[testIndex] );
 
-                // normalize info data
-                
-                item.info = parseInfo( infoData[testIndex] );
+                    //
+                    var population = item.info.populacao;
+                    var genQty = 250;
 
-                //
-                var population = item.info.populacao;
-                var genQty = item.info.gen;
+                    item.fitness = [];
+                    item.variances = [];
 
-                item.fitness = [];
-                item.variances = [];
+                    var gensInTest = R.slice(0, genQty * population, gensData);
+                    gensData = R.remove(0, genQty * population, gensData);
+                    
+                    item.gens = Array(genQty).fill().map(function(_, i) {
+                        var gen = R.slice(0, population, gensInTest);
+                        gen.map(function (d){
+                            d.fitness = parseFloat(d.fitness);
+                            return d;
+                        });
+                        gensInTest = R.remove(0, population, gensInTest);
 
-                var gensInTest = R.slice(0, genQty * population, gensData);
-                gensData = R.remove(0, genQty * population, gensData);
-                
-                item.gens = Array(genQty).fill().map(function(_, i) {
-                    var gen = R.slice(0, population, gensInTest);
-                    gensInTest = R.remove(0, population, gensInTest);
+                        item.fitness[i] = parseFitness(gen);
+                        item.variances[i] =  d3.variance( item.fitness[i] );
 
-                    item.fitness[i] = parseFitness(gen);
-                    item.variances[i] =  d3.variance( item.fitness[i] );
+                        return gen;
+                    });
+                    
+                    console.assert(item.gens.length === genQty, 'Generation qty is not correct!!');
 
-                    return gen;
+                    return item;
                 });
-
-                console.assert(item.gens.length === genQty, 'Generation qty is not correct!!');
-
-                return item;
             });
-
+            debugger;
             return dataset;
         });
     }
@@ -84,11 +89,12 @@ var selectedAlgorithm = '0';
         //
         var promiseList = [];
 
-        algorithms.forEach(function(alg) {
+       /* algorithms.forEach(function(alg) {
             promiseList.push(loadDatasetForAlgorithm(alg));
         });
+        */
 
-        return Promise.all(promiseList);
+        return loadDatasetForAlgorithm();
     }
 
     function renderDataset() {
