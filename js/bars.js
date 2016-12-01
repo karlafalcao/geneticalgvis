@@ -17,8 +17,8 @@ var barsPlot = function (svgContainerId) {
     var colour = d3.scaleOrdinal()
                 .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);
 
-    var x = d3.scaleTime().range([0, width]),
-        x2 = d3.scaleTime().range([0, width]),
+    var x = d3.scaleOrdinal().range([0, width]),
+        x2 = d3.scaleOrdinal().range([0, width]),
         y = d3.scaleLinear().range([height, 0]),
         y2 = d3.scaleLinear().range([height2, 0]);
 
@@ -48,17 +48,72 @@ var barsPlot = function (svgContainerId) {
 
     function parse(d) {
         d.date = new Date(d.date);
+        // var value = { date: parseDate(d.date) };
+        // var y0 = 0;
+        // value.counts = ["count", "count2", "count3"].map(function(name) {
+        //     return { 
+        //         name: name,
+        //         y0: y0,
+                // y1: y0 += +d[name]
+        //     };
+        // });
+        // value.total = value.counts[value.counts.length - 1].y1;
         return d;
     }
-    var render = function(data){
-        data.map(parse);
 
-        x.domain(d3.extent(data, function(d) { return d.date; }));
+     var indivOccurrences = {
+        // '[5, 3, 6, 0, 2, 4, 1, 7]' : {
+        //     'Test1Gen0': 3,
+        //     'Test1Gen2': 3
+        // }
+    }
+
+    var backGens
+    function normalizeData(data) {
+        var teste1 = data[0];
+
+        var allGens = data.reduce(function(prev, cur, sampleIndex) {
+           
+
+           var gensData = cur.gens.map(function(gen, genIndex) {
+            
+                var value = {
+                    name: 'Test' + (sampleIndex+1) + 'Gen' + genIndex,
+                    total: 20
+                }
+
+                var freq = {
+                    count1: gen.filter(function(indiv){ return indiv.fitness < 0.25; }).length,
+                    count2: gen.filter(function(indiv){ return indiv.fitness >= 0.25 && indiv.fitness < 0.50; }).length,
+                    count3: gen.filter(function(indiv){ return indiv.fitness >= 0.50 && indiv.fitness < 0.75; }).length,
+                    count4: gen.filter(function(indiv){ return indiv.fitness >= 0.75;}).length,
+                };
+
+                var y0 = 0;
+                value.counts = Object.keys(freq).map(function(name) {
+                    return { 
+                        name: name,
+                        y0: y0,
+                        y1: y0 += +freq[name]
+                    };
+                });
+                return value;
+            });
+            return prev.concat(gensData);
+        }, []);
+        
+        console.log(allGens);
+        return allGens;
+    }
+
+    var render = function(data){
+        // data.map(parse);
+
+        x.domain(d3.extent(data, function(d) { return d.name; }));
         y.domain([0, d3.max(data, function(d) { return d.total; })]);
         x2.domain(x.domain());
         y2.domain(y.domain());
         colour.domain(d3.keys(data[0]));
-
         
         // draw the bars
         focus.append("g")
@@ -68,7 +123,7 @@ var barsPlot = function (svgContainerId) {
         .enter()
         .append("g")
         .attr("class", "bar stack")
-        .attr("transform", function(d) { return "translate(" + x(d.date) + ",0)"; })
+        .attr("transform", function(d) { return "translate(" + x(d.name) + ",0)"; })
             .selectAll("rect")
             .data(function(d) { return d.counts; })
         .enter()
@@ -97,7 +152,7 @@ var barsPlot = function (svgContainerId) {
         .enter()
         .append("rect")
         .attr("class", "bar")
-        .attr("x", function(d) { return x2(d.date) - 3; })
+        .attr("x", function(d) { return x2(d.name) - 3; })
         .attr("width", 6)
         .attr("y", function(d) { return y2(d.total); })
         .attr("height", function(d) { return height2 - y2(d.total); });
@@ -113,21 +168,20 @@ var barsPlot = function (svgContainerId) {
     };
 
     function brushed() {
-        if (d3.event.sourceEvent && d3.event.sourceEvent.type === "zoom") return; // ignore brush-by-zoom
         var s = d3.event.selection || x2.range();
         x.domain(s.map(x2.invert, x2));
-        focus.selectAll(".bar.stack")
-            .attr("transform", function(d) { return "translate(" + x(d.date) + ",0)"; })
-        focus.select(".axis--x").call(xAxis);
-    }
 
-    function type(d) {
-        d.date = parseDate(d.date);
-        d.price = +d.price;
-        return d;
+        focus
+            .selectAll(".bar.stack")
+            .attr("transform", function(d) { return "translate(" + x(d.name) + ",0)"; })
+        
+        focus
+            .select(".axis--x")
+            .call(xAxis);
     }
 
     return {
+        normalizeData: normalizeData,
         render: render
     }
 }

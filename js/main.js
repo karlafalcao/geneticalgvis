@@ -114,7 +114,7 @@ var selectedAlgorithm = '0';
         //
         var mybars = barsPlot('bars1');
         // mybars.normalizeData(dataset[selectedAlgorithm]);
-        mybars.render(barsData);
+        mybars.render(mybars.normalizeData(dataset[selectedAlgorithm]));
 
         // PCA
         // pcaPlots.normalizedData(dataset);
