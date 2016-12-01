@@ -109,7 +109,7 @@ var selectedAlgorithm = '0';
         myTree.render(treeData);
 
         var myRadialTree = radialTreePlot('radialTree1');
-        myRadialTree.render(myRadialTree.normalizeData(dataset[selectedAlgorithm]));
+        myRadialTree.render(treeData);
 
         //
         var mybars = barsPlot('bars1');

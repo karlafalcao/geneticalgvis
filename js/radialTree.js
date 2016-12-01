@@ -22,7 +22,7 @@ var radialTreePlot = function(svgContainerId) {
         .attr("transform", "translate(" + (width / 2) + "," + (height / 2) + ")");
 
     var tree = d3.tree()
-        .size([height, radius - 90])
+        .size([height, radius - 50])
         .separation(function(a, b) { return (a.parent == b.parent ? 1 : 2) / a.depth; });
 
     var burrow = function(table) {
@@ -146,12 +146,12 @@ var radialTreePlot = function(svgContainerId) {
             .attr("r", 2);
 
        //
-       //node.append("text")
-       //    .attr("dy", ".31em")
-       //    .attr("x", function(d) { return d.x < 180 === !d.children ? 6 : -6; })
-       //    .style("text-anchor", function(d) { return d.x < 180 === !d.children ? "start" : "end"; })
-       //    .attr("transform", function(d) { return "rotate(" + (d.x < 180 ? d.x - 90 : d.x + 90) + ")"; })
-       //    .text(function(d) { return d.data.name === 'root' ? d.data.name : ''; });
+       node.append("text")
+          .attr("dy", ".31em")
+          .attr("x", function(d) { return d.x < 180 === !d.children ? 6 : -6; })
+          .style("text-anchor", function(d) { return d.x < 180 === !d.children ? "start" : "end"; })
+          .attr("transform", function(d) { return "rotate(" + (d.x < 180 ? d.x - 90 : d.x + 90) + ")"; })
+          .text(function(d) { return d.data.name === 'root' ? d.data.name : ''; });
 
         d3.select(self.frameElement).style("height", height + margin.top + margin.bottom + "px");
     }
