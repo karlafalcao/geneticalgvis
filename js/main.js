@@ -104,18 +104,17 @@ var selectedAlgorithm = '0';
         myBoxes.render(myBoxes.normalizeData(dataset[selectedAlgorithm]));
 
         //
+        var mybars = barsPlot('bars1');
+        // mybars.normalizeData(dataset[selectedAlgorithm]);
+        mybars.render(mybars.normalizeData(dataset[selectedAlgorithm]));
+        //
+
         var myTree = treePlot('tree1');
         var treeData = myTree.normalizeData(dataset[selectedAlgorithm]);
         myTree.render(treeData);
 
         var myRadialTree = radialTreePlot('radialTree1');
         myRadialTree.render(treeData);
-
-        //
-        var mybars = barsPlot('bars1');
-        // mybars.normalizeData(dataset[selectedAlgorithm]);
-        mybars.render(mybars.normalizeData(dataset[selectedAlgorithm]));
-
         // PCA
         // pcaPlots.normalizedData(dataset);
         // pcaPlots.init();
