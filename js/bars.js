@@ -116,6 +116,7 @@ var barsPlot = function (svgContainerId) {
         // draw the bars
         focus.append("g")
             .attr("class", "bars")
+            .attr('clip-path', 'url(#clip)')
             .selectAll(".bar.stack")
             .data(data)
         .enter()
@@ -145,6 +146,7 @@ var barsPlot = function (svgContainerId) {
         // draw bars
         context.append("g")
             .attr("class", "bars")
+            .attr('clip-path', 'url(#clip)')
             .selectAll(".bar")
             .data(data)
         .enter()
