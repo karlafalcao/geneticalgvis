@@ -25,100 +25,6 @@ var radialTreePlot = function(svgContainerId) {
         .size([height, radius - 50])
         .separation(function(a, b) { return (a.parent == b.parent ? 1 : 2) / a.depth; });
 
-    var burrow = function(table) {
-      // create nested object
-      var obj = {};
-      table.forEach(function(row) {
-        // start at root
-        var layer = obj;
-
-        // create children as nested objects
-        row.taxonomy.forEach(function(key) {
-          layer[key] = key in layer ? layer[key] : {};
-          layer = layer[key];
-        });
-      });
-
-      // recursively create children array
-      var descend = function(obj, depth) {
-        var arr = [];
-        var depth = depth || 0;
-        for (var k in obj) {
-          var child = {
-            name: k,
-            depth: depth,
-            children: descend(obj[k], depth+1)
-          };
-          arr.push(child);
-        }
-        return arr;
-      };
-
-      // use descend to create nested children arrys
-      return {
-        name: "root",
-        children: descend(obj, 1),
-        depth: 0
-      }
-    };
-
-    function normalizeData(data) {
-        console.log(data);
-        var tree = [];
-        var teste1 = data[0];
-
-        var reversedGens = teste1.gens.reverse();
-
-        //TODO: transpose and reduce
-        reversedGens.forEach(function(gen, genIndex) {
-            
-            gen.forEach( function(indiv, indivIndex) {
-                
-                if (genIndex > 0) {
-                    var prevGen = reversedGens[genIndex-1];
-                    var prevIndiv = prevGen[indivIndex];
-                    
-                    if (prevIndiv.config === indiv.config || prevIndiv.fitness === indiv.fitness) {
-                        return; 
-                    }
-                }
-
-                if (!tree[indivIndex]) {
-                    tree[indivIndex] = '';
-                }
-
-                // if (tree.indexOf(tree[indivIndex] + indiv.config) === -1 && tree[indivIndex]) {
-                //     tree.push(tree[indivIndex] + indiv.config);
-                // }
-                
-                tree[indivIndex] += indiv.config + '.';
-            });
-
-
-        });
-
-        tree = tree.map(function(path) {
-            var shouldRemove = R.compose(R.equals(R.length(path) - 1), R.lastIndexOf('.'));
-            if(shouldRemove(path)) {
-                path = R.dropLast(1, path);
-            }
-            return {
-                path: path
-            };
-        });
-
-        console.log(tree);
-        
-        tree.forEach(function(row) {
-            row.taxonomy = row.path.split(".");
-        });
-
-        root = d3.hierarchy(burrow(tree));
-        root.x0 = height / 2;
-        root.y0 = 0;
-        return root;
-    }
-
     function diagonalRadial(d) {
         return "M" + project(d.source.x, d.source.y)
             + "C" + project(d.source.x, (d.source.y + d.target.y) / 2)
@@ -162,7 +68,6 @@ var radialTreePlot = function(svgContainerId) {
     }
 
     return {
-        render: render,
-        normalizeData: normalizeData
+        render: render
     }
 };

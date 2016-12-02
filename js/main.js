@@ -80,7 +80,7 @@ var selectedAlgorithm = '0';
                     return item;
                 });
             });
-            debugger;
+
             return dataset;
         });
     }

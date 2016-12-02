@@ -17,8 +17,8 @@ var barsPlot = function (svgContainerId) {
     var colour = d3.scaleOrdinal()
                 .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);
 
-    var x = d3.scaleOrdinal().range([0, width]),
-        x2 = d3.scaleOrdinal().range([0, width]),
+    var x = d3.scaleLinear().range([0, width]),
+        x2 = d3.scaleLinear().range([0, width]),
         y = d3.scaleLinear().range([height, 0]),
         y2 = d3.scaleLinear().range([height2, 0]);
 
@@ -106,9 +106,8 @@ var barsPlot = function (svgContainerId) {
     }
 
     var render = function(data){
-        // data.map(parse);
 
-        x.domain(d3.extent(data, function(d) { return d.name; }));
+        x.domain([0, data.length - 1]);
         y.domain([0, d3.max(data, function(d) { return d.total; })]);
         x2.domain(x.domain());
         y2.domain(y.domain());
@@ -122,7 +121,7 @@ var barsPlot = function (svgContainerId) {
         .enter()
         .append("g")
         .attr("class", "bar stack")
-        .attr("transform", function(d) { return "translate(" + x(d.name) + ",0)"; })
+        .attr("transform", function(d, i) { return "translate(" + x(i) + ",0)"; })
             .selectAll("rect")
             .data(function(d) { return d.counts; })
         .enter()
@@ -151,7 +150,7 @@ var barsPlot = function (svgContainerId) {
         .enter()
         .append("rect")
         .attr("class", "bar")
-        .attr("x", function(d) { return x2(d.name) - 3; })
+        .attr("x", function(d, i) { return x2(i) - 3; })
         .attr("width", 6)
         .attr("y", function(d) { return y2(d.total); })
         .attr("height", function(d) { return height2 - y2(d.total); });
@@ -172,7 +171,7 @@ var barsPlot = function (svgContainerId) {
 
         focus
             .selectAll(".bar.stack")
-            .attr("transform", function(d) { return "translate(" + x(d.name) + ",0)"; })
+            .attr("transform", function(d, i) { return "translate(" + x(i) + ",0)"; })
         
         focus
             .select(".axis--x")
