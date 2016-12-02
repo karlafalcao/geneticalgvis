@@ -1,6 +1,8 @@
-# algoritmos_lewis_karla-visualizacao-2016-2
-Visualizando soluções para o problema das 8 Rainhas usando Algoritmos Genéticos
+# Visualização da performance de Algoritmos Genéticos aplicados ao Problema das 8 Rainhas
 
-![Boxplots](img/boxplots.png)
+##
 
-![PCA](img/pca.png)
+## Authors
+
+* Helmiton Junior
+* Karla Falcao
