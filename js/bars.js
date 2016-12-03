@@ -137,7 +137,10 @@ var barsPlot = function (svgContainerId) {
         focus.append("g")
             .attr("class", "axis axis--x")
             .attr("transform", "translate(0," + height + ")")
-            .call(xAxis);
+            .call(xAxis.tickValues([0,250,500,750,1000,1250,1500,1750,2000,2250])
+	            	.tickFormat(function (d,i){
+	            		return ["Teste "+(i+1)];
+	            	}));
 
         focus.append("g")
             .attr("class", "axis axis--y")
@@ -160,7 +163,10 @@ var barsPlot = function (svgContainerId) {
         context.append("g")
             .attr("class", "axis axis--x")
             .attr("transform", "translate(0," + height2 + ")")
-            .call(xAxis2);
+            .call(xAxis2.tickValues([0,250,500,750,1000,1250,1500,1750,2000,2250])
+	            	.tickFormat(function (d,i){
+	            		return ["Teste "+(i+1)];
+	            	}));
 
         context.append("g")
             .attr("class", "brush")
@@ -170,14 +176,24 @@ var barsPlot = function (svgContainerId) {
     function brushed() {
         var s = d3.event.selection || x2.range();
         x.domain(s.map(x2.invert, x2));
-
+        console.log(d3.event.selection);
         focus
             .selectAll(".bar.stack")
             .attr("transform", function(d, i) { return "translate(" + x(i) + ",0)"; })
-        
-        focus
-            .select(".axis--x")
-            .call(xAxis);
+
+        if (d3.event.selection == null){
+	        focus
+	            .select(".axis--x")
+	            .call(xAxis
+	            	.tickValues([0,250,500,750,1000,1250,1500,1750,2000,2250])
+	            	.tickFormat(function (d,i){
+	            		return ["Teste "+(i+1)];
+	            	}));
+        } else {
+        	focus
+	            .select(".axis--x")
+	            .call(xAxis.tickValues(null));
+        }
     }
 
     return {
