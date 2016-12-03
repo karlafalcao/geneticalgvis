@@ -136,19 +136,29 @@ var barsPlot = function (svgContainerId) {
 	            	.tickFormat(function (d,i){
 	            		return ["Teste "+(i+1)];
 	            	}));
-        
-        xAxisElem.append('text')
-        .attrs({
-            transform: 'translate(-30, ' + -(height/2) +') rotate(-90)',
-            y: 6,
-            'font-size' : '1em',
-            fill: '#000'
-        })
-        .text('Indivíduos');
 
-        focus.append("g")
+        xAxisElem.append('text')
+            .text('Gerações')
+            .attrs({
+                x: width/2,
+                y: 30,
+                'font-size': '1em',
+                fill: '#000'
+            });
+
+        var yAxisElem = focus.append("g")
             .attr("class", "axis axis--y")
             .call(yAxis);
+
+        yAxisElem
+            .append('text')
+            .attrs({
+                transform: 'translate(-30, ' + ((height/2) - 50) +') rotate(-90)',
+                y: 6,
+                'font-size' : '1em',
+                fill: '#000'
+            })
+            .text('Indivíduos');
 
         // draw overview bars
         context.append("g")
