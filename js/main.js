@@ -119,6 +119,8 @@ var selectedAlgorithm = '0';
         // pcaPlots.normalizedData(dataset);
         // pcaPlots.init();
 
+        var myCoordinate = coordinatesPlot('coordinates1', dataset[selectedAlgorithm]);
+
         subscribeSelection();
         //#end
     }

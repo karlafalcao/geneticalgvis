@@ -199,7 +199,7 @@ var barsPlot = function (svgContainerId) {
                         }else if (d%250 == 0){
                             return ["Teste "+((d/250)+1)];
                         } else { 
-                            return [d%250];
+                            return ["Gen "+d%250];
                         }
                         
                     }));
