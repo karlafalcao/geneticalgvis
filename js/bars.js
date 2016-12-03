@@ -192,7 +192,17 @@ var barsPlot = function (svgContainerId) {
         } else {
         	focus
 	            .select(".axis--x")
-	            .call(xAxis.tickValues(null));
+	            .call(xAxis.tickValues(null)
+                    .tickFormat(function (d,i){
+                        if (d==0){
+                            return ("Teste 1");
+                        }else if (d%250 == 0){
+                            return ["Teste "+((d/250)+1)];
+                        } else { 
+                            return [d%250];
+                        }
+                        
+                    }));
         }
     }
 
