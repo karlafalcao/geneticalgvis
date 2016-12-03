@@ -102,6 +102,7 @@ section {
 }
 
 svg {
+    overflow: visible !important;
     float: left;
 }
 svg text {
