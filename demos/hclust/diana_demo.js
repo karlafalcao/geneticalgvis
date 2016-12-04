@@ -14,15 +14,6 @@ var data = [
     [8,5]
 ];
 
-var distance = new Array(data.length);
-for(var i = 0; i < data.length; ++i) {
-    distance[i] = new Array(data.length);
-    for (var j = 0; j < data.length; ++j) {
-        distance[i][j] = euclidean(data[i], data[j]);
-    }
-}
-
-
 console.log(' -> ');
 
 var diana = hclust.diana(data);
