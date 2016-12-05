@@ -58,22 +58,18 @@ var barsPlot = function (svgContainerId) {
         .attr("class", "context")
         .attr("transform", "translate(" + margin2.left + "," + margin2.top + ")");
 
-     var indivOccurrences = {
-        // '[5, 3, 6, 0, 2, 4, 1, 7]' : {
-        //     'Test1Gen0': 3,
-        //     'Test1Gen2': 3
-        // }
-    }
-
     function normalizeData(data) {
         var teste1 = data[0];
 
         var allGens = data.reduce(function(prev, cur, sampleIndex) {
+            var testLabel = 'Test' + (sampleIndex+1);
 
-           var gensData = cur.gens.map(function(gen, genIndex) {
-            
+            var gensData = cur.gens.map(function(gen, genIndex) {
+
+                var genLabel = 'Gen' + genIndex;
+
                 var value = {
-                    name: 'Test' + (sampleIndex+1) + 'Gen' + genIndex,
+                    name: testLabel + genLabel,
                     total: 20
                 }
 
@@ -85,6 +81,7 @@ var barsPlot = function (svgContainerId) {
                 };
 
                 var y0 = 0;
+                
                 value.counts = Object.keys(freq).map(function(name) {
                     return { 
                         name: name,
@@ -92,8 +89,10 @@ var barsPlot = function (svgContainerId) {
                         y1: y0 += +freq[name]
                     };
                 });
+
                 return value;
             });
+
             return prev.concat(gensData);
         }, []);
         

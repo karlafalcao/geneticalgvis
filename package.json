@@ -4,9 +4,11 @@
   "description": "Visualização de algoritmos genéticos",
   "main": "index.js",
   "dependencies": {
+    "biojs-io-newick": "^1.5.0",
     "d3": "^4.4.0",
     "jsonfile": "^2.4.0",
-    "ml-hclust": "^1.2.0"
+    "ml-hclust": "^1.2.0",
+    "ramda": "^0.22.1"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",

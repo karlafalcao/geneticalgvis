@@ -53,11 +53,11 @@ body {
 <script src="//d3js.org/d3.v3.min.js"></script>
 <script>
 
-var outerRadius = 960 / 2,
+var outerRadius = 1024 / 2,
     innerRadius = outerRadius - 170;
 
 var color = d3.scale.category10()
-    .domain(["Bacteria", "Eukaryota", "Archaea"]);
+    .domain(["Test1", "Test2", "Test3", "Test4", "Test5", "Test6", "Test7", "Test8", "Test9", "Test10"]);
 
 var cluster = d3.layout.cluster()
     .size([360, innerRadius])
@@ -93,11 +93,10 @@ legend.append("text")
 var chart = svg.append("g")
     .attr("transform", "translate(" + outerRadius + "," + outerRadius + ")");
 
-d3.text("life.txt", function(error, life) {
+d3.json("../scripts/treeData.json", function(error, data) {
   if (error) throw error;
-
-  var root = parseNewick(life),
-      nodes = cluster.nodes(root),
+  root = data;
+  var nodes = cluster.nodes(root),
       links = cluster.links(nodes),
       input = d3.select("#show-length input").on("change", changed),
       timeout = setTimeout(function() { input.property("checked", true).each(changed); }, 2000);
@@ -131,7 +130,9 @@ d3.text("life.txt", function(error, life) {
       .attr("dy", ".31em")
       .attr("transform", function(d) { return "rotate(" + (d.x - 90) + ")translate(" + (innerRadius + 4) + ",0)" + (d.x < 180 ? "" : "rotate(180)"); })
       .style("text-anchor", function(d) { return d.x < 180 ? "start" : "end"; })
-      .text(function(d) { return d.name.replace(/_/g, " "); })
+      .text(function(d) { 
+          debugger;
+          return d.name.replace(/_/g, " "); })
       .on("mouseover", mouseovered(true))
       .on("mouseout", mouseovered(false));
 

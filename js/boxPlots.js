@@ -2,8 +2,8 @@ var boxPlots = function (svgContainerId) {
     var margin = {top: 20, right: 80, bottom: 30, left: 50};
 
     //Width and height
-    var width = 600 - margin.left - margin.right;
-    var height = 300 - margin.top - margin.bottom;
+    var width = 880 - margin.left - margin.right;
+    var height = 400 - margin.top - margin.bottom;
 
     //Update scale domains
     var barWidth = 40;
