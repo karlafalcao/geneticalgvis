@@ -2,8 +2,11 @@ var coordinatesPlot = function (svgContainerId, data) {
 
 
 var info = data.map(function(d, i){
-	d.info.name = 'teste'+(i+1);
-
+	if (i > 9){
+    d.info.name = 'Alg 2 teste'+(i-9);  
+  } else {
+    d.info.name = 'Alg 1 teste'+(i+1);
+  }
 	delete d.info.populacao;
 	return d.info;
 });
@@ -63,7 +66,14 @@ foreground = svg.append("svg:g")
   .selectAll("path")
   .data(info)
   .enter().append("svg:path")
-  .attr("d", path);
+  .attr("d", path)
+  .attr("stroke", function(d, i){
+      if (i < 10){
+        return 'steelblue';
+      } else {
+        return 'red';
+      }
+  });
 
 // Add a group element for each dimension.
 var g = svg.selectAll(".dimension")

@@ -1,5 +1,6 @@
 var algorithms = ['pmx1', 'pmx2', 'pmx3', 'pmx4', 'pmx5', 'pmx6'];
 var selectedAlgorithm = '0';
+var selectedAlgorithm2 = '2';
 
 !function(){
     var dataset;
@@ -53,7 +54,10 @@ var selectedAlgorithm = '0';
         // pcaPlots.normalizedData(dataset);
         // pcaPlots.init();
 
-        var myCoordinate = coordinatesPlot('coordinates1', dataset[selectedAlgorithm]);
+        var multidata = dataset[selectedAlgorithm].concat(dataset[selectedAlgorithm2]);
+        console.log("Alou");
+        console.log(dataset[selectedAlgorithm2]);
+        var myCoordinate = coordinatesPlot('coordinates1',multidata);
 
         // subscribeSelection();
         //#end
