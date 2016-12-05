@@ -11,8 +11,8 @@ var selectedAlgorithm = '0';
             selectedAlgorithm = this.value;
 
             document.getElementById('boxes1').remove();
-            document.getElementById('tree1').remove();
-            document.getElementById('radialTree1').remove();
+            // document.getElementById('tree1').remove();
+            // document.getElementById('radialTree1').remove();
             document.getElementById('bars1').remove();
 
             renderDataset();
@@ -55,7 +55,7 @@ var selectedAlgorithm = '0';
 
         var myCoordinate = coordinatesPlot('coordinates1', dataset[selectedAlgorithm]);
 
-        subscribeSelection();
+        // subscribeSelection();
         //#end
     }
 

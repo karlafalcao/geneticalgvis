@@ -100,7 +100,6 @@ function transition(g) {
 // Returns the path for a given data point.
 function path(d) {
   return line(dimensions.map(function(p) {
-  	debugger;
     return [position(p), y[p](d[p])];
   }));
 }

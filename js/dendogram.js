@@ -4,8 +4,19 @@ var dendogramPlot = function(svgContainerId) {
       innerRadius = outerRadius - 170;
 
   var color = d3.scaleOrdinal()
-      .range(d3.schemeCategory10)
-      .domain(["Test1", "Test2", "Test3", "Test4", "Test5", "Test6", "Test7", "Test8", "Test9", "Test10"]);
+      .range([
+          "#a6cee3",
+          "#1a1a1a",
+          "#b2df8a",
+          "#33a02c",
+          "#fb9a99",
+          "#e31a1c",
+          "#fdbf6f",
+          "#ff7f00",
+          "#cab2d6",
+          "#66c2a5",
+        ])
+      .domain(["Teste1", "Teste2", "Teste3", "Teste4", "Teste5", "Teste6", "Teste7", "Teste8", "Teste9", "Teste10"]);
 
   var cluster = d3.cluster()
       .size([360, innerRadius])
@@ -19,9 +30,19 @@ var dendogramPlot = function(svgContainerId) {
 
   var chart = svg.append("g")
       .attr("transform", "translate(" + outerRadius + "," + outerRadius + ")");
+
+  function mouseovered(active) {
+    return function(d) {
+      d3.select(this).classed("label--active", active);
+      d3.select(d.linkExtensionNode).classed("link-extension--active", active).each(moveToFront);
+      do d3.select(d.linkNode).classed("link--active", active).each(moveToFront); while (d = d.parent);
+    };
+  }
+
   
-  var linkExtension;
-  var link;
+  function moveToFront() {
+    this.parentNode.appendChild(this);
+  }
   function render(data) {
     drawLabels();
 
@@ -29,9 +50,7 @@ var dendogramPlot = function(svgContainerId) {
     root
       .sum(function(d) { return 1; })
       .sort(function(a, b) { return (a.value - b.value) || d3.ascending(a.data.length, b.data.length); });
-    
 
-    
     var nodes = root.descendants(),
         links = root.links(),
         input = d3.select("#show-length input").on("change", changed);
@@ -44,7 +63,7 @@ var dendogramPlot = function(svgContainerId) {
     setRadius(root, root.data.length = 0, innerRadius / maxLength(root));
     setColor(root);
 
-    linkExtension = chart.append("g")
+    var linkExtension = chart.append("g")
         .attr("class", "link-extensions")
       .selectAll("path")
         .data(links.filter(function(d) { return !d.target.children; }))
@@ -54,7 +73,7 @@ var dendogramPlot = function(svgContainerId) {
           return step(d.target.x, d.target.y, d.target.x, innerRadius); 
         });
 
-    link = chart.append("g")
+    var link = chart.append("g")
         .attr("class", "links")
       .selectAll("path")
         .data(links)
@@ -63,42 +82,37 @@ var dendogramPlot = function(svgContainerId) {
         .attr("d", function(d) { return step(d.source.x, d.source.y, d.target.x, d.target.y) })
         .style("stroke", function(d) { return d.target.color; });
 
-    chart.append("g")
+    var text = chart.append("g")
         .attr("class", "labels")
       .selectAll("text")
         .data(nodes.filter(function(d) { return !d.children; }))
-      .enter().append("text")
-        .attr("dy", ".31em")
-        .attr("transform", function(d) { return "rotate(" + (d.x - 90) + ")translate(" + (innerRadius + 4) + ",0)" + (d.x < 180 ? "" : "rotate(180)"); })
-        .style("text-anchor", function(d) { return d.x < 180 ? "start" : "end"; })
-        .text(function(d) { 
-          return d.data.name.replace(/_/g, " "); 
-        })
-        .on("mouseover", mouseovered(true))
-        .on("mouseout", mouseovered(false));
+    .enter()
+      .append("text")
+      .attr('class', "label")
+      .attr('fill', function(d) { return d.color; })
+      .attr("dy", ".31em")
+      .attr("transform", function(d) { return "rotate(" + (d.x - 90) + ")translate(" + (innerRadius + 4) + ",0)" + (d.x < 180 ? "" : "rotate(180)"); })
+      .style("text-anchor", function(d) { return d.x < 180 ? "start" : "end"; })
+      .text(function(d) { 
+        return d.data.name.replace(/_/g, " "); 
+      })
+      .on("mouseover", mouseovered(true))
+      .on("mouseout", mouseovered(false));
+
+      // d3.selectAll('.label')
+      // .on("mouseover", mouseovered(true))
+      // .on("mouseout", mouseovered(false));
+    d3.select(self.frameElement).style("height", outerRadius * 2 + "px");
     
-    function changed() {
-      clearTimeout(timeout);
-      var checked = this.checked;
-      d3.transition().duration(750).each(function() {
-        linkExtension.transition().attr("d", function(d) { return step(d.target.x, checked ? d.target.radius : d.target.y, d.target.x, innerRadius); });
-        link.transition().attr("d", function(d) { return step(d.source.x, checked ? d.source.radius : d.source.y, d.target.x, checked ? d.target.radius : d.target.y) });
-      });
-    }
-
-    function mouseovered(active) {
-      return function(d) {
-        d3.select(this).classed("label--active", active);
-        d3.select(d.linkExtensionNode).classed("link-extension--active", active).each(moveToFront);
-        do d3.select(d.linkNode).classed("link--active", active).each(moveToFront); while (d = d.parent);
-      };
-    }
-
-    function moveToFront() {
-      this.parentNode.appendChild(this);
-    }
+   function changed() {
+    clearTimeout(timeout);
+    var checked = this.checked;
+    d3.transition().duration(750).each(function() {
+      linkExtension.transition().attr("d", function(d) { return step(d.target.x, checked ? d.target.radius : d.target.y, d.target.x, innerRadius); });
+      link.transition().attr("d", function(d) { return step(d.source.x, checked ? d.source.radius : d.source.y, d.target.x, checked ? d.target.radius : d.target.y) });
+    });
+    } 
   };
-
 
   // Compute the maximum cumulative length of any node in the tree.
   function maxLength(d) {
@@ -157,7 +171,7 @@ var dendogramPlot = function(svgContainerId) {
 
   }
 
-  d3.select(self.frameElement).style("height", outerRadius * 2 + "px");
+  
   return {
     render: render
   }

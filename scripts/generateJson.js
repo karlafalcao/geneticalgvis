@@ -8,7 +8,9 @@ var parser = require("biojs-io-newick");
 var newick = require("./newick.js");
 
 //vars
-var testeQty = 10;
+var TEST_QTY = 10;
+var TEST_PREFIX = 'Teste';
+var ALG_QTY = 6;
 
 var parseInfo = R.map(parseFloat);
 
@@ -73,12 +75,7 @@ function parseJson (json) {
             if (nest.hasOwnProperty('index') &&
                 ['string'].indexOf(typeof nest.index) !== -1 &&
                 nest.index.length > 0) {
-                if (nest.index !== name) {
-
-                    name = nest.index;
-                } else {
-                    name = "";
-                }
+                name = nest.index;
             }
             var children = [];
             nest.children.forEach(function(child){
@@ -124,12 +121,12 @@ function getDistanceMatrix(data) {
 }
 
 
-function normalizeDataForTree(data) {
+function normalizeDataForDendogram(data) {
     var indivOccurrences = {};
     
     //calculate configs frequencies in tests
     data.forEach(function(sample, sampleIndex) {
-        var testLabel = 'Test' + (sampleIndex+1);
+        var testLabel = TEST_PREFIX + (sampleIndex+1);
 
         sample.gens.forEach(function(gen, genIndex) {
 
@@ -166,12 +163,13 @@ function normalizeDataForTree(data) {
         agnesTree.children.push(testChild);
     }
 
-    console.log(agnesTree);
+    // console.log(agnesTree);
 
     var newickData = parseJson(agnesTree);
-    console.log(newickData);
+    // console.log(newickData);
     // console.assert(newickData === "(A:0.1,B:0.2,(C:0.3,D:0.4)E:0.5):0.4;", function(){console.log(arguments)});
-    //parse newick
+    
+    //dendogram parse newick
     return newick.parse(newickData);
 }
 
@@ -183,8 +181,8 @@ function generateData(csvInfoFile, csvGensFile) {
     // console.log(infoData);
     // console.log(gensData);
     
-    var dataset = Array(6).fill().map(function (_, algIndex){
-        return Array(testeQty).fill().map(function (_, testIndex) {
+    var dataset = Array(ALG_QTY).fill().map(function (_, algIndex){
+        return Array(TEST_QTY).fill().map(function (_, testIndex) {
             var item = {};
 
             // normalize info data
@@ -231,7 +229,11 @@ function main() {
     writeJson(pmxDataset, 'pmx.json');
     
     //normalize for PMX1
-    writeJson(normalizeDataForTree(pmxDataset[0]), 'treeData.json');
+    var dendogramDataset =  pmxDataset.map(function(item) {
+        return normalizeDataForDendogram(item);
+    });
+    // console.log(dendogramDataset);
+    writeJson(normalizeDataForDendogram(pmxDataset[0]), 'treeData.json');
 }
 
 main();
