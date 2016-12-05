@@ -1,12 +1,41 @@
-var coordinatesPlot = function (svgContainerId, data) {
+var data = [{
+  "Plant": "American Blueberry",
+  "Chemical": "Calcium Ion",
+  "Pathway": "neuron projection development",
+  "Gene": "ADCYAP1",
+  "Disease": "Alzheimer's Disease"
+}, {
+  "Plant": "American Blueberry",
+  "Chemical": "Calcium Ion",
+  "Pathway": "neuron projection development",
+  "Gene": "MAPK14",
+  "Disease": "Alzheimer's Disease"
+}, {
+  "Plant": "American Blueberry",
+  "Chemical": "Calcium Ion",
+  "Pathway": "positive regulation of gene expression",
+  "Gene": "ADCYAP1",
+  "Disease": "Alzheimer's Disease"
+}, {
+  "Plant": "American Blueberry",
+  "Chemical": "Calcium Ion",
+  "Pathway": "positive regulation of gene expression",
+  "Gene": "MAPK14",
+  "Disease": "Alzheimer's Disease"
+}, {
+  "Plant": "American Blueberry",
+  "Chemical": "Calcium Ion",
+  "Pathway": "intracellular signal transduction",
+  "Gene": "ADCYAP1",
+  "Disease": "Alzheimer's Disease"
+}, {
+  "Plant": "American Blueberry",
+  "Chemical": "Calcium Ion",
+  "Pathway": "intracellular signal transduction",
+  "Gene": "MAPK14",
+  "Disease": "Alzheimer's Disease"
+}];
 
-
-var info = data.map(function(d, i){
-	d.info.name = 'teste'+(i+1);
-
-	delete d.info.populacao;
-	return d.info;
-});
 
 var m = [30, 10, 10, 10],
   w = 1000 - m[1] - m[3],
@@ -21,39 +50,34 @@ var axis = d3.axisLeft();
 var background;
 var foreground;
 
-var svg = d3.select("#main").append("svg:svg")
+var svg = d3.select("body").append("svg:svg")
   .attr("width", w + m[1] + m[3])
   .attr("height", h + m[0] + m[2])
   .append("svg:g")
   .attr("transform", "translate(" + m[3] + "," + m[0] + ")");
 
 // Extract the list of dimensions and create a scale for each.
-dimensions = d3.keys(info[0]).filter(function(d) {
-  
-  if (d === "name") {
-    y[d] = d3.scalePoint().domain(info.map(function(p) {
+x.domain(dimensions = d3.keys(data[0]).filter(function(d) {
+  if (d === "name") return false;
+  if (d === "Plant" || d === "Chemical" || d === "Pathway" || d === "Gene" || d === "Disease") {
+    y[d] = d3.scalePoint().domain(data.map(function(p) {
       return p[d];
     })).range([h, 0]);
   } else {
     y[d] = d3.scaleLinear()
-      .domain(d3.extent(info, function(p) {
+      .domain(d3.extent(data, function(p) {
         return +p[d];
       }))
       .range([h, 0]);
   }
   return true;
-});
-var names = dimensions.pop();
-dimensions.splice(0, 0, names);
-
-x.domain(dimensions);
-
+}));
 
 // Add grey background lines for context.
 background = svg.append("svg:g")
   .attr("class", "background")
   .selectAll("path")
-  .data(info)
+  .data(data)
   .enter().append("svg:path")
   .attr("d", path);
 
@@ -61,7 +85,7 @@ background = svg.append("svg:g")
 foreground = svg.append("svg:g")
   .attr("class", "foreground")
   .selectAll("path")
-  .data(info)
+  .data(data)
   .enter().append("svg:path")
   .attr("d", path);
 
@@ -83,10 +107,7 @@ g.append("svg:g")
   .append("svg:text")
   .attr("text-anchor", "middle")
   .attr("y", -9)
-  .text(function(d){
-  	console.log(d);
-  	return String(d);
-  });
+  .text(String);
 
 function position(d) {
   var v = dragging[d];
@@ -100,10 +121,6 @@ function transition(g) {
 // Returns the path for a given data point.
 function path(d) {
   return line(dimensions.map(function(p) {
-  	debugger;
     return [position(p), y[p](d[p])];
   }));
-}
-
-
 }

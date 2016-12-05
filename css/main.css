@@ -185,3 +185,33 @@ svg text {
 .label--active {
   font-weight: bold;
 }
+
+
+/* PARALLEL COORDINATES STYLE */
+
+.background path {
+  fill: none;
+  stroke: #ccc;
+  stroke-opacity: .4;
+  shape-rendering: crispEdges;
+}
+
+.foreground path {
+  fill: none;
+  stroke: steelblue;
+  stroke-opacity: .4;
+  stroke-width: 1.5;
+}
+
+.axis text {
+  text-shadow: 0 1px 0 #fff;
+  cursor: move;
+  -webkit-text-stroke: 1px #fff;
+   fill: black;
+   text-shadow:
+       2px 2px 0 #fff,
+     -2px -2px 0 #fff,  
+      2px -2px 0 #fff,
+      -2px 2px 0 #fff,
+       2px 2px 0 #fff;
+}
