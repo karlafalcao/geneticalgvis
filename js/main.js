@@ -5,17 +5,32 @@ var selectedAlgorithm2 = '2';
 !function(){
     var dataset;
 
-    function subscribeSelection () {
-        var selVal = document.getElementById('alg-select');
+    function subscribeSelection (selectId, index) {
+        var selElem =  document.createElement('select');
+        selElem.setAttribute('id', selectId + index);
+        
+        var optElem = document.createElement('option');
+        algorithms.forEach(function(name, index){
+            optElem.setAttribute('value', index);
+            if (index === 0){
+                optElem.setAttribute('selected', true);
+            }
 
-        selVal.addEventListener('change', function(e) {
+        })
+        
+        
+        var mainElem = document.getElementById('#main');
+
+        mainElem.appendChild(selElem);
+
+        selElem.addEventListener('change', function(e) {
             selectedAlgorithm = this.value;
 
-            document.getElementById('boxes1').remove();
+            document.getElementById('boxes' + index).remove();
             // document.getElementById('tree1').remove();
-            document.getElementById('bars1').remove();
-            document.getElementById('dendogram1').remove();
-            document.getElementById('coordinates1').remove();
+            document.getElementById('bars' + index).remove();
+            document.getElementById('dendogram' + index).remove();
+            document.getElementById('coordinates1' + index).remove();
 
             renderDataset();
 
@@ -30,17 +45,24 @@ var selectedAlgorithm2 = '2';
         });
     }
 
-    function renderDataset() {
+    function plot(index) {
+        var options = {
+            viewsContainer: '#main',
+            boxesId: 'boxes' + index,
+            barsId: 'bars' + index,
+            dendogramId: 'dendogram' + index,
+            coordsId: 'coordinates' + index
+        }
 
         // Box Plot
-        var myBoxes = boxPlots('boxes1');
+        var myBoxes = boxPlots(options.viewsContainer, options.boxesId);
         myBoxes.render(myBoxes.normalizeData(dataset[selectedAlgorithm]));
-        //
 
-        var mybars = barsPlot('bars1');
+        //
+        var mybars = barsPlot(options.viewsContainer, options.barsId);
         mybars.render(mybars.normalizeData(dataset[selectedAlgorithm]));
         //
-        var myDendogram = dendogramPlot('dendogram1');
+        var myDendogram = dendogramPlot(options.viewsContainer, options.dendogramId);
         updateDataset('../scripts/treeData.json').then(function(treeData) {
             console.log(treeData);
             myDendogram.render(treeData[selectedAlgorithm]);
@@ -55,11 +77,12 @@ var selectedAlgorithm2 = '2';
         // pcaPlots.init();
 
         var multidata = dataset[selectedAlgorithm].concat(dataset[selectedAlgorithm2]);
-        console.log("Alou");
-        console.log(dataset[selectedAlgorithm2]);
-        var myCoordinate = coordinatesPlot('coordinates1',multidata);
+        var myCoordinate = coordinatesPlot(options.viewsContainer, options.coordsId);
+        myCoordinate.render(multidata);
+    }
+    function renderDataset() {
+        plot();
 
-        subscribeSelection();
         //#end
     }
 
@@ -72,6 +95,8 @@ var selectedAlgorithm2 = '2';
 
                 //render
                 renderDataset();
+
+                // subscribeSelection('alg-select', 1);
 
             });
     }

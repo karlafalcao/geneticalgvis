@@ -1,6 +1,6 @@
-var dendogramPlot = function(svgContainerId) {
+var dendogramPlot = function(viewsContainer, svgContainerId) {
   var timeout;
-  var outerRadius = 860 / 2,
+  var outerRadius = 760 / 2,
       innerRadius = outerRadius - 170;
 
   var color = d3.scaleOrdinal()
@@ -22,7 +22,7 @@ var dendogramPlot = function(svgContainerId) {
       .size([360, innerRadius])
       .separation(function(a, b) { return 1; });
 
-  var svg = d3.select("#main")
+  var svg = d3.select(viewsContainer)
       .append("svg")
       .attr("id", svgContainerId)
       .attr("width", outerRadius * 2)
@@ -155,15 +155,15 @@ var dendogramPlot = function(svgContainerId) {
         .attr("transform", function(d, i) { return "translate(" + (outerRadius * 2 - 10) + "," + (i * 20 + 10) + ")"; });
 
     legend.append("rect")
-        .attr("x", -18)
-        .attr("width", 18)
-        .attr("height", 18)
+        .attr("x", -15)
+        .attr("width", 15)
+        .attr("height", 15)
         .style("fill", color);
 
     legend.append("text")
         .attr("x", -24)
         .attr("y", 9)
-        .attr("dy", ".35em")
+        .attr("font-size", "12px")
         .style("text-anchor", "end")
         .text(function(d) { return d; });
 

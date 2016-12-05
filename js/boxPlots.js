@@ -1,4 +1,4 @@
-var boxPlots = function (svgContainerId) {
+var boxPlots = function (viewsContainer, svgContainerId) {
     var margin = {top: 20, right: 80, bottom: 30, left: 50};
 
     //Width and height
@@ -17,7 +17,7 @@ var boxPlots = function (svgContainerId) {
     var dateBarColor = '#ccc';
 
     //Create SVG element
-    var svgContainer = d3.select('#main')
+    var svgContainer = d3.select(viewsContainer)
         .append('svg')
         .attr('id', svgContainerId)
         .attr('width', width + margin.left + margin.right)

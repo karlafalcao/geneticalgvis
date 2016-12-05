@@ -1,6 +1,6 @@
-var barsPlot = function (svgContainerId) {
+var barsPlot = function (viewsContainer, svgContainerId) {
 
-    var svg = d3.select("#main")
+    var svg = d3.select(viewsContainer)
         .append('svg')
         .attr('id', svgContainerId)
         .attr("width", 960)

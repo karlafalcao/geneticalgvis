@@ -141,7 +141,6 @@ function normalizeDataForDendogram(data) {
                 }
 
                 if (indivOccurrences[testLabel] && !indivOccurrences[testLabel][config]) {
-                    // indivOccurrences[testLabel][config][0] = ocurrences
                     indivOccurrences[testLabel][config] = [0 , fitness];
                 }
 
