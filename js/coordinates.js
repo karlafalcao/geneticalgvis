@@ -19,6 +19,35 @@ var coordinatesPlot = function (viewsContainer, svgContainerId) {
     .attr("height", h + m[0] + m[2])
     .append("svg:g")
     .attr("transform", "translate(" + m[3] + "," + m[0] + ")");
+  
+
+  function brushed (d){
+
+    var brushes = d3.selectAll('.parallel-brush')._groups[0];
+    var actives = dimensions.filter(function(p, i) { 
+      console.log(y[p].range());
+      return d3.brushSelection( brushes[i]) !== null;
+    }),
+    extents = actives.map(function(p, i) { 
+      s = d3.event.selection || d3.brushSelection( brushes[i])
+      return s.map(y[p].invert, y[p]) 
+    });
+    
+    foreground.style("display", function(d) {
+
+      return (actives.every(function(p, activeIndex) {
+        return extents[activeIndex][0] <= d[p] && y[p] <= extents[activeIndex][1];
+        // return false;
+      }) ? null : 'none');
+    });
+  }
+  function brushstart() {
+    d3.event.sourceEvent.stopPropagation();
+  }
+    var brush = d3.brushY()
+        .extent([[0, 0], [20, h]])
+        .on("end", brushed)
+        .on("start", brushstart);
 
   function render(data) {
 
@@ -53,7 +82,6 @@ var coordinatesPlot = function (viewsContainer, svgContainerId) {
 
     x.domain(dimensions);
 
-
     // Add grey background lines for context.
     background = svg.append("svg:g")
       .attr("class", "background")
@@ -87,18 +115,23 @@ var coordinatesPlot = function (viewsContainer, svgContainerId) {
       });
 
     // Add an axis and title.
-    g.append("svg:g")
-      .attr("class", "axis")
+    var axisgroup = g.append("svg:g")
+      .attr("class", "parallel-axis")
       .each(function(d) {
         d3.select(this).call(d3.axisRight(y[d]));
-      })
-      .append("svg:text")
+      });
+
+      axisgroup.append("svg:text")
       .attr("text-anchor", "middle")
       .attr("y", -9)
       .text(function(d){
         console.log(d);
         return String(d);
-      });
+      })
+      
+      axisgroup.append("g")
+            .attr("class", "parallel-brush")
+            .call(brush);
   }
   function position(d) {
     var v = dragging[d];
