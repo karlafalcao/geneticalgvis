@@ -11,6 +11,7 @@ var newick = require("./newick.js");
 var TEST_QTY = 10;
 var TEST_PREFIX = 'Teste';
 var ALG_QTY = 6;
+var genQty = 250;
 
 var parseInfo = R.map(parseFloat);
 
@@ -178,19 +179,23 @@ function generateData(csvInfoFile, csvGensFile) {
     var infoData = readCSV(csvInfoFile);
     var gensData = readCSV(csvGensFile);
 
-    // console.log(infoData);
+    console.log(infoData);
     // console.log(gensData);
     
     var dataset = Array(ALG_QTY).fill().map(function (_, algIndex){
+        var infoInAlg = R.slice(0, TEST_QTY, infoData);
+        infoData = R.remove(0, TEST_QTY, infoData);
+
         return Array(TEST_QTY).fill().map(function (_, testIndex) {
             var item = {};
 
             // normalize info data
-            item.info = parseInfo( infoData[testIndex] );
+            // console.log(infoInAlg);
+            item.info = parseInfo( infoInAlg[testIndex] );
 
             //
             var population = item.info.populacao;
-            var genQty = 250;
+            
 
             item.fitness = [];
             item.variances = [];
@@ -219,21 +224,22 @@ function generateData(csvInfoFile, csvGensFile) {
     });
     
     return dataset;
-
 }
 
 function main() {
 
-    var pmxDataset = generateData('../dados/pmx/info.csv', '../dados/pmx/pmx.csv');
+    var pmxDataset = generateData('../dados/pmx/info.csv', 
+                                '../dados/pmx/pmx.csv');
 
     writeJson(pmxDataset, 'pmx.json');
     
     //normalize for PMX1
-    var dendogramDataset =  pmxDataset.map(function(item) {
+    var dendogramDataset = pmxDataset.map(function(item) {
         return normalizeDataForDendogram(item);
     });
+
     // console.log(dendogramDataset);
-    writeJson(normalizeDataForDendogram(pmxDataset[0]), 'treeData.json');
+    writeJson(dendogramDataset, 'treeData.json');
 }
 
 main();

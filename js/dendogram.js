@@ -32,8 +32,9 @@ var dendogramPlot = function(svgContainerId) {
       .attr("transform", "translate(" + outerRadius + "," + outerRadius + ")");
 
   function mouseovered(active) {
+    var that = this;
     return function(d) {
-      d3.select(this).classed("label--active", active);
+      d3.select(that).classed("label--active", active);
       d3.select(d.linkExtensionNode).classed("link-extension--active", active).each(moveToFront);
       do d3.select(d.linkNode).classed("link--active", active).each(moveToFront); while (d = d.parent);
     };
@@ -99,18 +100,15 @@ var dendogramPlot = function(svgContainerId) {
       .on("mouseover", mouseovered(true))
       .on("mouseout", mouseovered(false));
 
-      // d3.selectAll('.label')
-      // .on("mouseover", mouseovered(true))
-      // .on("mouseout", mouseovered(false));
     d3.select(self.frameElement).style("height", outerRadius * 2 + "px");
     
-   function changed() {
-    clearTimeout(timeout);
-    var checked = this.checked;
-    d3.transition().duration(750).each(function() {
-      linkExtension.transition().attr("d", function(d) { return step(d.target.x, checked ? d.target.radius : d.target.y, d.target.x, innerRadius); });
-      link.transition().attr("d", function(d) { return step(d.source.x, checked ? d.source.radius : d.source.y, d.target.x, checked ? d.target.radius : d.target.y) });
-    });
+    function changed() {
+      clearTimeout(timeout);
+      var checked = this.checked;
+      d3.transition().duration(750).each(function() {
+        linkExtension.transition().attr("d", function(d) { return step(d.target.x, checked ? d.target.radius : d.target.y, d.target.x, innerRadius); });
+        link.transition().attr("d", function(d) { return step(d.source.x, checked ? d.source.radius : d.source.y, d.target.x, checked ? d.target.radius : d.target.y) });
+      });
     } 
   };
 

@@ -13,8 +13,9 @@ var selectedAlgorithm2 = '2';
 
             document.getElementById('boxes1').remove();
             // document.getElementById('tree1').remove();
-            // document.getElementById('radialTree1').remove();
             document.getElementById('bars1').remove();
+            document.getElementById('dendogram1').remove();
+            document.getElementById('coordinates1').remove();
 
             renderDataset();
 
@@ -41,15 +42,14 @@ var selectedAlgorithm2 = '2';
         //
         var myDendogram = dendogramPlot('dendogram1');
         updateDataset('../scripts/treeData.json').then(function(treeData) {
-            myDendogram.render(treeData);
+            console.log(treeData);
+            myDendogram.render(treeData[selectedAlgorithm]);
         });
         
         // var myTree = treePlot('tree1');
         // var treeData = myTree.normalizeData(dataset[selectedAlgorithm]);
         // myTree.render(treeData);
 
-        // var myRadialTree = radialTreePlot('radialTree1');
-        // myRadialTree.render(treeData);
         // PCA
         // pcaPlots.normalizedData(dataset);
         // pcaPlots.init();
@@ -59,7 +59,7 @@ var selectedAlgorithm2 = '2';
         console.log(dataset[selectedAlgorithm2]);
         var myCoordinate = coordinatesPlot('coordinates1',multidata);
 
-        // subscribeSelection();
+        subscribeSelection();
         //#end
     }
 

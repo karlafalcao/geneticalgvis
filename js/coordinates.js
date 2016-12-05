@@ -24,7 +24,9 @@ var axis = d3.axisLeft();
 var background;
 var foreground;
 
-var svg = d3.select("#main").append("svg:svg")
+var svg = d3.select("#main")
+  .append("svg:svg")
+  .attr('id', svgContainerId)
   .attr("width", w + m[1] + m[3])
   .attr("height", h + m[0] + m[2])
   .append("svg:g")
