@@ -91,9 +91,6 @@ var selectedAlgorithm = ['0', '1'];
         // var treeData = myTree.normalizeData(dataset[selectedAlgorithm]);
         // myTree.render(treeData);
 
-        // PCA
-        // pcaPlots.normalizedData(dataset);
-        // pcaPlots.init();
 
     }
 
@@ -121,6 +118,11 @@ var selectedAlgorithm = ['0', '1'];
                 //render
                 renderDataset(1);
                 renderDataset(2);
+
+                // PCA
+                //pcaPlots.normalizedData(dataset);
+                //pcaPlots.init();
+                //pcaPlots.render();
 
                 var myCoordinate = coordinatesPlot('#main', 'coordinates');
                 var multidata = dataset[getSelectedAlgorithm(1)].concat(dataset[getSelectedAlgorithm(2)]);

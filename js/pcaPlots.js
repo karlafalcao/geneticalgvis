@@ -182,6 +182,7 @@ var pcaPlots = function () {
             }, item));
         });
 
+
         var pc = getPCFromSVD(dataset);
         // console.log(pc);
 
