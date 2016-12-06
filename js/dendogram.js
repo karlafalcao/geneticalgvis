@@ -31,9 +31,31 @@ var dendogramPlot = function(viewsContainer, svgContainerId) {
   var chart = svg.append("g")
       .attr("transform", "translate(" + (outerRadius - 50) + "," + (outerRadius) + ")");
 
+        // Define the div for the tooltip
+  var div = d3.select("body").append("div") 
+      .attr("class", "tooltip")       
+      .style("opacity", 0);
+
   function mouseovered(active, leaves) {
     return function(d) {
       console.log(leaves[d.data.name]);
+      if (active){
+        div.transition()    
+          .duration(200)    
+          .style("opacity", 1)
+          .style("left", (d3.event.pageX) + "px")   
+          .style("top", (d3.event.pageY - 28) + "px")
+          .style("height", function(j){
+            return 100 + 10*JSON.parse(leaves[d.data.name].config).length;
+          });
+          
+          div.html('Configuração: </br>'+leaves[d.data.name].config+'</br>Fitness: '+leaves[d.data.name].info.fitness+
+            '</br>Repetições: '+leaves[d.data.name].info.occurrences);  
+     } else {
+        div.transition()    
+          .duration(500)    
+          .style("opacity", 0); 
+     }
       d3.select(this).classed("label--active", active);
       d3.select(d.linkExtensionNode).classed("link-extension--active", active).each(moveToFront);
       do d3.select(d.linkNode).classed("link--active", active).each(moveToFront); while (d = d.parent);

@@ -187,3 +187,18 @@ svg text {
       -2px 2px 0 #fff,
        2px 2px 0 #fff;
 }
+
+/*TOOLTIP*/
+
+div.tooltip { 
+    position: absolute;     
+    text-align: center;     
+    width: 130px;                   
+    padding: 2px;       
+    font: 12px sans-serif;    
+    background: steelblue; 
+    border: 0px;    
+    border-radius: 8px;     
+    pointer-events: none;    
+    color: white; 
+}
