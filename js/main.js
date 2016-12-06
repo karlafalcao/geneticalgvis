@@ -30,6 +30,7 @@ var selectedAlgorithm = ['0', '1'];
         });
 
         var menuItem = document.createElement('li');
+        menuItem.textContent = 'Visualização '+ index + ': ';
         menuItem.append(selElem);
 
         var menuElem = document.querySelector('.menu-select')

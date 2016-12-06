@@ -31,10 +31,10 @@ var dendogramPlot = function(viewsContainer, svgContainerId) {
   var chart = svg.append("g")
       .attr("transform", "translate(" + (outerRadius - 50) + "," + (outerRadius) + ")");
 
-  function mouseovered(active) {
-    var that = this;
+  function mouseovered(active, leaves) {
     return function(d) {
-      d3.select(that).classed("label--active", active);
+      console.log(leaves[d.data.name]);
+      d3.select(this).classed("label--active", active);
       d3.select(d.linkExtensionNode).classed("link-extension--active", active).each(moveToFront);
       do d3.select(d.linkNode).classed("link--active", active).each(moveToFront); while (d = d.parent);
     };
@@ -96,19 +96,11 @@ var dendogramPlot = function(viewsContainer, svgContainerId) {
       .attr("dy", ".31em")
       .attr("transform", function(d) { return "rotate(" + (d.x - 90) + ")translate(" + (innerRadius + 4) + ",0)" + (d.x < 180 ? "" : "rotate(180)"); })
       .style("text-anchor", function(d) { return d.x < 180 ? "start" : "end"; })
-      .text(function(d) { 
-        // console.log(leaves[d.data.name]);
-        return d.data.name.replace(/_/g, " "); 
-        // return leaves[d.data.name].config; 
+      .text(function(d) {
+        return d.data.name.replace(/_/g, " ");
       })
-      .on("mouseover", function(){ console.log('alou') })
-      .on("mouseout", function(){ console.log('alou') });
-    
-
-    text
-      .on("mouseover", function(){ console.log('alou') })
-      .on("mouseout", function(){ console.log('alou') });
-    
+      .on("mouseover", mouseovered(true, leaves))
+      .on("mouseout", mouseovered(false, leaves));
 
 
     d3.select(self.frameElement).style("height", outerRadius * 2 + "px");
