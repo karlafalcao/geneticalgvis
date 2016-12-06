@@ -23,21 +23,23 @@ var coordinatesPlot = function (viewsContainer, svgContainerId) {
 
   function brushed (d){
 
-    var brushes = d3.selectAll('.parallel-brush')._groups[0];
+    var brushes = {};
+    d3.selectAll('.parallel-brush').each(function(p){
+      brushes[p] = this;
+    })
+    
     var actives = dimensions.filter(function(p, i) { 
-      console.log(y[p].range());
-      return d3.brushSelection( brushes[i]) !== null;
+      return d3.brushSelection(brushes[p]) != null;
     }),
     extents = actives.map(function(p, i) { 
-      s = d3.event.selection || d3.brushSelection( brushes[i])
-      return s.map(y[p].invert, y[p]) 
+      s = d3.brushSelection( brushes[p])
+      return s; 
     });
     
     foreground.style("display", function(d) {
 
       return (actives.every(function(p, activeIndex) {
-        return extents[activeIndex][0] <= d[p] && y[p] <= extents[activeIndex][1];
-        // return false;
+        return extents[activeIndex][0] <= y[p](d[p]) && y[p](d[p]) <= extents[activeIndex][1];
       }) ? null : 'none');
     });
   }
@@ -46,7 +48,7 @@ var coordinatesPlot = function (viewsContainer, svgContainerId) {
   }
     var brush = d3.brushY()
         .extent([[0, 0], [20, h]])
-        .on("end", brushed)
+        .on("brush end", brushed)
         .on("start", brushstart);
 
   function render(data) {
