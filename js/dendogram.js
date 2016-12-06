@@ -28,6 +28,12 @@ var dendogramPlot = function(viewsContainer, svgContainerId) {
       .attr("width", outerRadius * 2)
       .attr("height", outerRadius * 2);
 
+
+  svg.append('text')
+      .text('Distribuição dos indivíduos (ocorrências e fitness) por teste')
+      .style('font-weight', 'bold')
+      .attr('transform', 'translate(100, 25)');
+
   var chart = svg.append("g")
       .attr("transform", "translate(" + (outerRadius - 50) + "," + (outerRadius) + ")");
 

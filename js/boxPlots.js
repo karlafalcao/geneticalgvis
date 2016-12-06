@@ -1,5 +1,5 @@
 var boxPlots = function (viewsContainer, svgContainerId) {
-    var margin = {top: 20, right: 80, bottom: 30, left: 40};
+    var margin = {top: 50, right: 80, bottom: 30, left: 40};
 
     //Width and height
     var width = 670 - margin.left - margin.right;
@@ -23,6 +23,12 @@ var boxPlots = function (viewsContainer, svgContainerId) {
         .attr('width', width + margin.left + margin.right)
         .attr('height', height + margin.top + margin.bottom);
 
+
+    svgContainer.append('text')
+        .text('Variância das populações por teste')
+        .style('font-weight', 'bold')
+        .attr('transform', 'translate('+margin.left+', 30)');
+    
     var svg = svgContainer.append('g')
         .attr('width', width)
         .attr('height', height)

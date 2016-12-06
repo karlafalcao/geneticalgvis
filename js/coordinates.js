@@ -22,6 +22,12 @@ var coordinatesPlot = function (viewsContainer, svgContainerId) {
     .attr("transform", "translate(" + m[3] + "," + m[0] + ")");
   
 
+
+  svg.append('text')
+      .text('Comparação de atributos entre algoritmos')
+      .style('font-weight', 'bold')
+      .attr('transform', 'translate(0, -40)');
+
   function brushed (d){
 
     var brushes = {};

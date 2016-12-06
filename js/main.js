@@ -7,7 +7,7 @@ var algorithms = ['pmx1', 'pmx2', 'pmx3', 'pmx4', 'pmx5', 'pmx6']
         Array(6).fill('cutcross').map(function(d, i){return d+' ' +(i+1); })
     );
 
-var selectedAlgorithm = ['0', '1'];
+var selectedAlgorithm = ['3', '6'];
 
 !function(){
     var dataset;
@@ -23,7 +23,7 @@ var selectedAlgorithm = ['0', '1'];
             optElem.setAttribute('value', i);
             optElem.textContent = name;
 
-            if ((index-1) === i){
+            if (selectedAlgorithm[0] === i || selectedAlgorithm[0] === i){
                 optElem.setAttribute('selected', true);
             }
             selElem.append(optElem);

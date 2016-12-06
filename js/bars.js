@@ -6,12 +6,19 @@ var barsPlot = function (viewsContainer, svgContainerId) {
         .attr("width", 750)
         .attr("height", 400);
 
+
+
     var margin = {top: 20, right: 120, bottom: 110, left: 40},
         margin2 = {top: 340, right: 120, bottom: 30, left: 40},
         width = +svg.attr("width") - margin.left - margin.right,
         height = +svg.attr("height") - margin.top - margin.bottom,
         height2 = +svg.attr("height") - margin2.top - margin2.bottom; //40px
-
+    
+    svg.append('text')
+        .text('Distribuição do fitness por população')
+        .style('font-weight', 'bold')
+        .attr('transform', 'translate('+margin.left+')');
+    
     var parseDate = d3.timeParse("%d/%m/%Y");
 
     var colour = d3.scaleOrdinal()
