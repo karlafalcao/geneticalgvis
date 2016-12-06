@@ -109,6 +109,13 @@ svg text {
     pointer-events: none;
 }
 
+.view {
+    display: block;
+    float: left;
+    width: 50%;
+    overflow: auto;
+}
+
 /*Dendogram Styles*/
 #show-length {
   position: absolute;

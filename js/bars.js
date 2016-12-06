@@ -238,7 +238,7 @@ var barsPlot = function (viewsContainer, svgContainerId) {
 
         labels = svg.append('g')
             .attr('class', 'labels')
-            .attr('transform', 'translate('+ (width + margin.left + 10) + ' , 0)');
+            .attr('transform', 'translate('+ (width + margin.left + 10) + ' , 30)');
 
         labels
             .append('text')

@@ -1,6 +1,6 @@
 var dendogramPlot = function(viewsContainer, svgContainerId) {
   var timeout;
-  var outerRadius = 760 / 2,
+  var outerRadius = 860 / 2,
       innerRadius = outerRadius - 170;
 
   var color = d3.scaleOrdinal()

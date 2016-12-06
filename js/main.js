@@ -4,40 +4,40 @@ var selectedAlgorithm2 = '2';
 
 !function(){
     var dataset;
+    var treeData;
 
     function subscribeSelection (selectId, index) {
         var selElem =  document.createElement('select');
         selElem.setAttribute('id', selectId + index);
         
-        var optElem = document.createElement('option');
-        algorithms.forEach(function(name, index){
-            optElem.setAttribute('value', index);
+        algorithms.forEach(function(name, i){
+            var optElem = document.createElement('option');
+            optElem.setAttribute('value', i);
+            optElem.textContent = name;
+
             if (index === 0){
                 optElem.setAttribute('selected', true);
             }
+            selElem.append(optElem);
+        });
 
-        })
-        
-        
-        var mainElem = document.getElementById('#main');
+        var mainElem = document.getElementById('main');
 
-        mainElem.appendChild(selElem);
+        mainElem.append(selElem);
 
         selElem.addEventListener('change', function(e) {
             selectedAlgorithm = this.value;
 
             document.getElementById('boxes' + index).remove();
-            // document.getElementById('tree1').remove();
             document.getElementById('bars' + index).remove();
             document.getElementById('dendogram' + index).remove();
-            document.getElementById('coordinates1' + index).remove();
 
-            renderDataset();
+            plot(index);
 
         });
     }
 
-    function updateDataset(url) {
+    function getJson(url) {
         return new Promise(function(resolve){
             d3.json(url, function(data) {
                 resolve(data);
@@ -45,29 +45,41 @@ var selectedAlgorithm2 = '2';
         });
     }
 
-    function plot(index) {
-        var options = {
-            viewsContainer: '#main',
+    function updateDataset(urlList) {   
+        return Promise.all(urlList.map(function(url){
+            return getJson(url);
+        }));
+    }
+    var myCoordinate;
+    function getOptions(index){
+        console.assert(index !== undefined);
+        return {
+            viewsContainer: '#view' + index,
             boxesId: 'boxes' + index,
             barsId: 'bars' + index,
-            dendogramId: 'dendogram' + index,
-            coordsId: 'coordinates' + index
+            dendogramId: 'dendogram' + index
         }
+    }
+    
 
+    function plot(index) {
+       
+        var options = getOptions(index);
+        //
+        var mybars = barsPlot(options.viewsContainer, options.barsId);
+        mybars.render(mybars.normalizeData(dataset[selectedAlgorithm]));
+        
         // Box Plot
         var myBoxes = boxPlots(options.viewsContainer, options.boxesId);
         myBoxes.render(myBoxes.normalizeData(dataset[selectedAlgorithm]));
 
         //
-        var mybars = barsPlot(options.viewsContainer, options.barsId);
-        mybars.render(mybars.normalizeData(dataset[selectedAlgorithm]));
-        //
         var myDendogram = dendogramPlot(options.viewsContainer, options.dendogramId);
-        updateDataset('../scripts/treeData.json').then(function(treeData) {
-            console.log(treeData);
-            myDendogram.render(treeData[selectedAlgorithm]);
-        });
-        
+        myDendogram.render(treeData[selectedAlgorithm]);
+
+        var multidata = dataset[selectedAlgorithm].concat(dataset[selectedAlgorithm2]);
+        myCoordinate.render(multidata);
+
         // var myTree = treePlot('tree1');
         // var treeData = myTree.normalizeData(dataset[selectedAlgorithm]);
         // myTree.render(treeData);
@@ -76,28 +88,35 @@ var selectedAlgorithm2 = '2';
         // pcaPlots.normalizedData(dataset);
         // pcaPlots.init();
 
-        var multidata = dataset[selectedAlgorithm].concat(dataset[selectedAlgorithm2]);
-        var myCoordinate = coordinatesPlot(options.viewsContainer, options.coordsId);
-        myCoordinate.render(multidata);
     }
-    function renderDataset() {
-        plot();
 
-        //#end
+    function renderDataset(index) {
+        
+        plot(index);
+
+        // subscribe option
+        subscribeSelection('alg-select', index);
     }
 
     function init() {
         //#begin
-        updateDataset('../scripts/pmx.json')
+        updateDataset([
+            '../scripts/pmx.json',
+            '../scripts/treeData.json'
+            ])
             .then(function(data){
-                dataset = data;
-                console.log(data);
-
+                
+                //
+                dataset = data[0];
+                treeData = data[1];
+                
+                myCoordinate = coordinatesPlot('#main', 'coordinates');
+                
                 //render
-                renderDataset();
-
-                // subscribeSelection('alg-select', 1);
-
+                renderDataset(1);
+                renderDataset(2);
+                
+                //#end
             });
     }
 
