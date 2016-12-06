@@ -48,7 +48,7 @@ var coordinatesPlot = function (viewsContainer, svgContainerId) {
     d3.event.sourceEvent.stopPropagation();
   }
     var brush = d3.brushY()
-        .extent([[0, 0], [20, h]])
+        .extent([[-20, 0], [20, h]])
         .on("brush end", brushed)
         .on("start", brushstart);
 

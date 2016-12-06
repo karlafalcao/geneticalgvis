@@ -23,10 +23,10 @@ var barsPlot = function (viewsContainer, svgContainerId) {
                 ]);
 
     var counts = [
-        "< 0.25",
-        ">= 0.25 e < 0.50",
-        ">= 0.50 e < 1",
-        "== 1",
+        "fitness < 0.25",
+        "0.25 <= fitness < 0.5",
+        "0.5 <= fitness < 1",
+        "fitness = 1",
     ];
 
     var x = d3.scaleLinear().range([0, width]),
@@ -238,7 +238,7 @@ var barsPlot = function (viewsContainer, svgContainerId) {
 
         labels = svg.append('g')
             .attr('class', 'labels')
-            .attr('transform', 'translate('+ 250 + ' , '+ margin2.top +')');
+            .attr('transform', 'translate('+ 220 + ' , '+ margin2.top +')');
 
         labels
             .append('text')
@@ -260,10 +260,16 @@ var barsPlot = function (viewsContainer, svgContainerId) {
             .append('g')
             .attr('class', 'line-group')
             .attr('transform', function (d, i, others) {
-                var position = i*90;
-                // if (i > 0) {
-                //     position = others[i-1].clientWidth;
-                // }
+                var position = i;
+                 if (i == 0) {
+                     position = -45;
+                 } else if (i == 1){
+                    position = 55;
+                 } else if (i == 2){
+                    position = 185;
+                 } else if (i == 3){
+                    position = 300;
+                 }
                 return 'translate(' +position+', 0)';
             });
                 

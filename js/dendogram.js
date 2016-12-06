@@ -16,8 +16,8 @@ var dendogramPlot = function(viewsContainer, svgContainerId) {
           "#cab2d6",
           "#66c2a5",
         ])
-      .domain(Array(10).fill("Teste").map(function(d, i){ return d+i}));
-
+      .domain(Array(10).fill("Teste").map(function(d, i){ return d+(i+1)}));
+ 
   var cluster = d3.cluster()
       .size([360, innerRadius])
       .separation(function(a, b) { return 1; });
