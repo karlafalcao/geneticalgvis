@@ -1,6 +1,6 @@
 var coordinatesPlot = function (viewsContainer, svgContainerId) {
-  var m = [30, 10, 10, 10],
-    w = 1000 - m[1] - m[3],
+  var m = [30, 10, 10, 30],
+    w = 1600 - m[1] - m[3],
     h = 300 - m[0] - m[2];
 
   var x = d3.scaleBand().range([0, w]);
@@ -85,18 +85,26 @@ var coordinatesPlot = function (viewsContainer, svgContainerId) {
     x.domain(dimensions);
 
     // Add grey background lines for context.
-    background = svg.append("svg:g")
+    var grayLines = svg.append("svg:g")
       .attr("class", "background")
       .selectAll("path")
       .data(info)
+    
+    background = grayLines
       .enter().append("svg:path")
       .attr("d", path);
+    
+    grayLines.attr("d", path);
+
+    grayLines.exit().remove();
 
     // Add blue foreground lines for focus.
-    foreground = svg.append("svg:g")
+    var lines = svg.append("svg:g")
       .attr("class", "foreground")
       .selectAll("path")
       .data(info)
+      
+    foreground = lines
       .enter().append("svg:path")
       .attr("d", path)
       .attr("stroke", function(d, i){
@@ -106,6 +114,17 @@ var coordinatesPlot = function (viewsContainer, svgContainerId) {
             return 'red';
           }
       });
+
+    lines.attr("d", path)
+      .attr("stroke", function(d, i){
+          if (i < 10){
+            return 'steelblue';
+          } else {
+            return 'red';
+          }
+      });
+
+    lines.exit().remove();
 
     // Add a group element for each dimension.
     var g = svg.selectAll(".dimension")
@@ -118,7 +137,7 @@ var coordinatesPlot = function (viewsContainer, svgContainerId) {
 
     // Add an axis and title.
     var axisgroup = g.append("svg:g")
-      .attr("class", "parallel-axis")
+      .attr("class", "axis")
       .each(function(d) {
         d3.select(this).call(d3.axisRight(y[d]));
       });
@@ -135,6 +154,7 @@ var coordinatesPlot = function (viewsContainer, svgContainerId) {
             .attr("class", "parallel-brush")
             .call(brush);
   }
+
   function position(d) {
     var v = dragging[d];
     return v == null ? x(d) : v;

@@ -1,13 +1,12 @@
 var algorithms = ['pmx1', 'pmx2', 'pmx3', 'pmx4', 'pmx5', 'pmx6'];
-var selectedAlgorithm = '0';
-var selectedAlgorithm2 = '2';
+var selectedAlgorithm = ['0', '1'];
 
 !function(){
     var dataset;
     var treeData;
 
     function subscribeSelection (selectId, index) {
-        var selElem =  document.createElement('select');
+        var selElem = document.createElement('select');
         selElem.setAttribute('id', selectId + index);
         
         algorithms.forEach(function(name, i){
@@ -15,18 +14,21 @@ var selectedAlgorithm2 = '2';
             optElem.setAttribute('value', i);
             optElem.textContent = name;
 
-            if (index === 0){
+            if (index === i){
                 optElem.setAttribute('selected', true);
             }
             selElem.append(optElem);
         });
 
-        var mainElem = document.getElementById('main');
+        var menuItem = document.createElement('li');
+        menuItem.append(selElem);
 
-        mainElem.append(selElem);
+        var menuElem = document.querySelector('.menu-select')
+        menuElem.append(menuItem);
+
 
         selElem.addEventListener('change', function(e) {
-            selectedAlgorithm = this.value;
+            selectedAlgorithm[index-1] = this.value;
 
             document.getElementById('boxes' + index).remove();
             document.getElementById('bars' + index).remove();
@@ -60,11 +62,14 @@ var selectedAlgorithm2 = '2';
             dendogramId: 'dendogram' + index
         }
     }
-    
+    function getSelectedAlgorithm(index) {
+        return selectedAlgorithm[index-1];
+    }
 
     function plot(index) {
        
         var options = getOptions(index);
+        var selectedAlgorithm = getSelectedAlgorithm(index);
         //
         var mybars = barsPlot(options.viewsContainer, options.barsId);
         mybars.render(mybars.normalizeData(dataset[selectedAlgorithm]));
@@ -76,9 +81,6 @@ var selectedAlgorithm2 = '2';
         //
         var myDendogram = dendogramPlot(options.viewsContainer, options.dendogramId);
         myDendogram.render(treeData[selectedAlgorithm]);
-
-        var multidata = dataset[selectedAlgorithm].concat(dataset[selectedAlgorithm2]);
-        myCoordinate.render(multidata);
 
         // var myTree = treePlot('tree1');
         // var treeData = myTree.normalizeData(dataset[selectedAlgorithm]);
@@ -92,10 +94,10 @@ var selectedAlgorithm2 = '2';
 
     function renderDataset(index) {
         
-        plot(index);
 
         // subscribe option
         subscribeSelection('alg-select', index);
+        plot(index);
     }
 
     function init() {
@@ -111,7 +113,8 @@ var selectedAlgorithm2 = '2';
                 treeData = data[1];
                 
                 myCoordinate = coordinatesPlot('#main', 'coordinates');
-                
+                var multidata = dataset[selectedAlgorithm[0]].concat(dataset[selectedAlgorithm[1]]);
+                myCoordinate.render(multidata);
                 //render
                 renderDataset(1);
                 renderDataset(2);

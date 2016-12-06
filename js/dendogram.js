@@ -1,6 +1,6 @@
 var dendogramPlot = function(viewsContainer, svgContainerId) {
   var timeout;
-  var outerRadius = 860 / 2,
+  var outerRadius = 780 / 2,
       innerRadius = outerRadius - 170;
 
   var color = d3.scaleOrdinal()
@@ -16,7 +16,7 @@ var dendogramPlot = function(viewsContainer, svgContainerId) {
           "#cab2d6",
           "#66c2a5",
         ])
-      .domain(["Teste1", "Teste2", "Teste3", "Teste4", "Teste5", "Teste6", "Teste7", "Teste8", "Teste9", "Teste10"]);
+      .domain(Array(10).fill("Teste").map(function(d, i){ return d+i}));
 
   var cluster = d3.cluster()
       .size([360, innerRadius])
@@ -29,7 +29,7 @@ var dendogramPlot = function(viewsContainer, svgContainerId) {
       .attr("height", outerRadius * 2);
 
   var chart = svg.append("g")
-      .attr("transform", "translate(" + outerRadius + "," + outerRadius + ")");
+      .attr("transform", "translate(" + (outerRadius - 50) + "," + (outerRadius - 50) + ")");
 
   function mouseovered(active) {
     var that = this;
@@ -149,20 +149,21 @@ var dendogramPlot = function(viewsContainer, svgContainerId) {
 
     var legend = svg.append("g")
         .attr("class", "legend")
+        .attr("transform", "translate(0,0)")
       .selectAll("g")
         .data(color.domain())
       .enter().append("g")
-        .attr("transform", function(d, i) { return "translate(" + (outerRadius * 2 - 10) + "," + (i * 20 + 10) + ")"; });
+        .attr("transform", function(d, i) { return "translate(" + 0 + "," + (i * 20 + 10) + ")"; });
 
     legend.append("rect")
-        .attr("x", -15)
-        .attr("width", 15)
-        .attr("height", 15)
+        .attr("x", 15)
+        .attr("width", 12)
+        .attr("height", 12)
         .style("fill", color);
 
     legend.append("text")
-        .attr("x", -24)
-        .attr("y", 9)
+        .attr("x", 70)
+        .attr("y", 10)
         .attr("font-size", "12px")
         .style("text-anchor", "end")
         .text(function(d) { return d; });

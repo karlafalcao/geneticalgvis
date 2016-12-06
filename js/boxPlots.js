@@ -1,9 +1,9 @@
 var boxPlots = function (viewsContainer, svgContainerId) {
-    var margin = {top: 20, right: 80, bottom: 30, left: 50};
+    var margin = {top: 20, right: 80, bottom: 30, left: 40};
 
     //Width and height
-    var width = 880 - margin.left - margin.right;
-    var height = 400 - margin.top - margin.bottom;
+    var width = 670 - margin.left - margin.right;
+    var height = 200 - margin.top - margin.bottom;
 
     //Update scale domains
     var barWidth = 40;
@@ -70,7 +70,7 @@ var boxPlots = function (viewsContainer, svgContainerId) {
         .attr('id', 'boxplot-axis-y')
         .append('text')
         .attrs({
-            transform: 'translate(-45, ' + (height/2 - 50) +') rotate(-90)',
+            transform: 'translate(-35, ' + (height/2 - 50) +') rotate(-90)',
             y: 6,
             'font-size' : '1em',
             fill: '#000'

@@ -3,11 +3,11 @@ var barsPlot = function (viewsContainer, svgContainerId) {
     var svg = d3.select(viewsContainer)
         .append('svg')
         .attr('id', svgContainerId)
-        .attr("width", 960)
-        .attr("height", 500);
+        .attr("width", 750)
+        .attr("height", 400);
 
     var margin = {top: 20, right: 120, bottom: 110, left: 40},
-        margin2 = {top: 430, right: 120, bottom: 30, left: 40},
+        margin2 = {top: 340, right: 120, bottom: 30, left: 40},
         width = +svg.attr("width") - margin.left - margin.right,
         height = +svg.attr("height") - margin.top - margin.bottom,
         height2 = +svg.attr("height") - margin2.top - margin2.bottom; //40px
