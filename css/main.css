@@ -159,6 +159,9 @@ svg text {
   font-weight: bold;
 }
 
+.menu-select {
+    list-style-type: none;
+}
 
 /* PARALLEL COORDINATES STYLE */
 

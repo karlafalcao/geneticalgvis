@@ -42,7 +42,7 @@ function getClusterDataFromTest(data){
     for (var config in data) {
         
         var value = data[config];
-        if (value[0] < 30) continue;
+        if (value[0] < 30 && value[1] !== 1) continue;
 
         if (!configsByInfo[JSON.stringify(value)]) {
             configsByInfo[JSON.stringify(value)] = [];
