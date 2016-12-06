@@ -97,17 +97,17 @@ var dendogramPlot = function(viewsContainer, svgContainerId) {
       .attr("transform", function(d) { return "rotate(" + (d.x - 90) + ")translate(" + (innerRadius + 4) + ",0)" + (d.x < 180 ? "" : "rotate(180)"); })
       .style("text-anchor", function(d) { return d.x < 180 ? "start" : "end"; })
       .text(function(d) { 
-        console.log(leaves[d.data.name]);
-        // return d.data.name.replace(/_/g, " "); 
-        return leaves[d.data.name].config; 
+        // console.log(leaves[d.data.name]);
+        return d.data.name.replace(/_/g, " "); 
+        // return leaves[d.data.name].config; 
       })
-      .on("mouseover", function(){ return mouseovered.call(this, true) })
-      .on("mouseout", function(){ return mouseovered.call(this, false) });
+      .on("mouseover", function(){ console.log('alou') })
+      .on("mouseout", function(){ console.log('alou') });
     
 
     text
-      .on("mouseover", function(){ return mouseovered.call(this, true) })
-      .on("mouseout", function(){ return mouseovered.call(this, false) });
+      .on("mouseover", function(){ console.log('alou') })
+      .on("mouseout", function(){ console.log('alou') });
     
 
 

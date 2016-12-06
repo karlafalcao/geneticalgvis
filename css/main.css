@@ -151,6 +151,10 @@ svg text {
   stroke-opacity: .6;
 }
 
+.label {
+    pointer-events:all;
+}
+
 .label--active {
   font-weight: bold;
 }

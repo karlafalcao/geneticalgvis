@@ -261,18 +261,40 @@ function main() {
         '../dados/pmx/pmx.csv'
     );
 
-    writeJson(pmxDataset, 'pmx.json');
+    var orderDataset = generateData(
+        '../dados/order1/info_order1.csv', 
+        '../dados/order1/order1.csv'
+    );
+    
+    
+    var edgeDataset = generateData(
+        '../dados/edge/info_edge.csv', 
+        '../dados/edge/edge.csv'
+    );
+
+    var cutcrossDataset = generateData(
+        '../dados/cutcross/info_cutcross.csv', 
+        '../dados/cutcross/cutcross.csv'
+    );
+
+    var dataset = pmxDataset
+        .concat(orderDataset)
+        .concat(edgeDataset)
+        .concat(cutcrossDataset);
+
+    // console.log(edgeDataset);
+
+    writeJson(dataset, 'dataset.json');
+    
     
     //normalize for PMX1
-    var dendogramDataset = pmxDataset.map(function(item) {
+    var dendogramDataset = dataset.map(function(item) {
         return normalizeDataForDendogram(item).tree;
     });
-
-    // console.log(dendogramDataset);
     writeJson(dendogramDataset, 'treeData.json');
     
     //normalize for PMX1
-    var leavesDataset = pmxDataset.map(function(item) {
+    var leavesDataset = dataset.map(function(item) {
         return normalizeDataForDendogram(item).leaves;
     });
 

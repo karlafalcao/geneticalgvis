@@ -1,4 +1,12 @@
-var algorithms = ['pmx1', 'pmx2', 'pmx3', 'pmx4', 'pmx5', 'pmx6'];
+var algorithms = ['pmx1', 'pmx2', 'pmx3', 'pmx4', 'pmx5', 'pmx6']
+    .concat(
+        Array(6).fill('order1').map(function(d, i){return d+' ' +(i+1); })
+    ).concat(
+        Array(6).fill('edge').map(function(d, i){return d+' ' +(i+1); })
+    ).concat(
+        Array(6).fill('cutcross').map(function(d, i){return d+' ' +(i+1); })
+    );
+
 var selectedAlgorithm = ['0', '1'];
 
 !function(){
@@ -110,7 +118,7 @@ var selectedAlgorithm = ['0', '1'];
     function init() {
         //#begin
         updateDataset([
-            '../scripts/pmx.json',
+            '../scripts/dataset.json',
             '../scripts/treeData.json',
             '../scripts/leaves.json',
             ])
