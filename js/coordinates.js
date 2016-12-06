@@ -94,7 +94,8 @@ var coordinatesPlot = function (viewsContainer, svgContainerId) {
       .enter().append("svg:path")
       .attr("d", path);
     
-    grayLines.attr("d", path);
+    grayLines
+    .attr("d", path);
 
     grayLines.exit().remove();
 
@@ -105,7 +106,8 @@ var coordinatesPlot = function (viewsContainer, svgContainerId) {
       .data(info)
       
     foreground = lines
-      .enter().append("svg:path")
+      .enter()
+      .append("svg:path")
       .attr("d", path)
       .attr("stroke", function(d, i){
           if (i < 10){
@@ -115,7 +117,8 @@ var coordinatesPlot = function (viewsContainer, svgContainerId) {
           }
       });
 
-    lines.attr("d", path)
+    lines
+      .attr("d", path)
       .attr("stroke", function(d, i){
           if (i < 10){
             return 'steelblue';

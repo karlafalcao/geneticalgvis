@@ -189,7 +189,6 @@ function generateData(csvInfoFile, csvGensFile) {
             var item = {};
 
             // normalize info data
-            // console.log(infoInAlg);
             item.info = parseInfo( infoInAlg[testIndex] );
 
             //

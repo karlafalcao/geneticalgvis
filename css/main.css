@@ -113,7 +113,7 @@ svg text {
     display: block;
     float: left;
     width: 50%;
-    overflow: auto;
+    overflow: hidden;
 }
 
 /*Dendogram Styles*/

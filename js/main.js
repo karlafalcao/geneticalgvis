@@ -33,8 +33,13 @@ var selectedAlgorithm = ['0', '1'];
             document.getElementById('boxes' + index).remove();
             document.getElementById('bars' + index).remove();
             document.getElementById('dendogram' + index).remove();
+            document.getElementById('coordinates').remove();
 
             plot(index);
+            
+            var myCoordinate = coordinatesPlot('#main', 'coordinates');
+            var multidata = dataset[getSelectedAlgorithm(1)].concat(dataset[getSelectedAlgorithm(2)]);
+            myCoordinate.render(multidata);
 
         });
     }
@@ -112,12 +117,14 @@ var selectedAlgorithm = ['0', '1'];
                 dataset = data[0];
                 treeData = data[1];
                 
-                myCoordinate = coordinatesPlot('#main', 'coordinates');
-                var multidata = dataset[selectedAlgorithm[0]].concat(dataset[selectedAlgorithm[1]]);
-                myCoordinate.render(multidata);
+                
                 //render
                 renderDataset(1);
                 renderDataset(2);
+
+                var myCoordinate = coordinatesPlot('#main', 'coordinates');
+                var multidata = dataset[getSelectedAlgorithm(1)].concat(dataset[getSelectedAlgorithm(2)]);
+                myCoordinate.render(multidata);
                 
                 //#end
             });
