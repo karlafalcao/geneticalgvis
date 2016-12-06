@@ -19,6 +19,10 @@ var getFitness = R.compose(parseFloat, R.prop('fitness'));
 
 var parseFitness = R.map(getFitness);
 
+var clusteredData = {};
+
+var leaves = {};
+
 function writeJson (data, fileName) {
 
     fs.writeFileSync(fileName, typeof data == 'object' ? JSON.stringify(data) : data);
@@ -33,22 +37,21 @@ function readCSV(file){
 }
 
 function getClusterDataFromTest(data){
-    var indivsByInfo = new Array();
+    var configsByInfo = new Array();
     
     for (var config in data) {
         
         var value = data[config];
         if (value[0] < 30) continue;
 
-        if (!indivsByInfo[JSON.stringify(value)]) {
-            indivsByInfo[JSON.stringify(value)] = [];
+        if (!configsByInfo[JSON.stringify(value)]) {
+            configsByInfo[JSON.stringify(value)] = [];
         }
-        indivsByInfo[JSON.stringify(value)].push(config);
-
+        configsByInfo[JSON.stringify(value)].push(config);
     }
 
     //
-    var dataToCluster = Object.keys(indivsByInfo).map(function(info){
+    var dataToCluster = Object.keys(configsByInfo).map(function(info){
         return JSON.parse(info);
     }).sort(function(a, b) { return a[0] - b[0]; });
     
@@ -62,7 +65,11 @@ function getClusterDataFromTest(data){
     // console.assert(agnes.distance <= 3.1360 && agnes.distance >= 0.001);
     // console.assert(agnes.distance <= 1886.0001 && agnes.distance >= 0.001);
     
-    return agnes;
+    return {
+        agnes: agnes,
+        info: dataToCluster,
+        configs: configsByInfo,
+    };
 }
 
 //author: https://github.com/daviddao/biojs-io-newick
@@ -77,6 +84,7 @@ function parseJson (json) {
                 ['string'].indexOf(typeof nest.index) !== -1 &&
                 nest.index.length > 0) {
                 name = nest.index;
+
             }
             var children = [];
             nest.children.forEach(function(child){
@@ -95,7 +103,23 @@ function parseJson (json) {
         else {
             var leaf = "";
             if(nest.hasOwnProperty('index')){
+
                 leaf = name + '_'+ (['string', 'number'].indexOf(typeof nest.index) !== -1 ? nest.index : '' );
+
+                var info = clusteredData[name].info[nest.index];
+                var infoStr = JSON.stringify(info);
+
+                var config = JSON.stringify(clusteredData[name].configs[infoStr]).split(' ').join('');
+
+                // console.log(config);
+                leaves[leaf] = {
+                    config: config,
+                    info: {
+                        occurrences: info[0],
+                        fitness: info[1]
+                    }
+                }
+
             }
             if(nest.hasOwnProperty('distance')){
                 leaf = leaf + ":"+nest.distance;
@@ -153,24 +177,30 @@ function normalizeDataForDendogram(data) {
         children: [],
         distance: 1,
         index: ''
-    };
+    };    
 
     for (test in indivOccurrences) {
-        var testChild = getClusterDataFromTest(indivOccurrences[test]);
+        clusteredData[test] = getClusterDataFromTest(indivOccurrences[test]);
+
+        var testChild = clusteredData[test].agnes;
         
         testChild.index = test;
         
         agnesTree.children.push(testChild);
     }
 
-    // console.log(agnesTree);
-
     var newickData = parseJson(agnesTree);
+
+    console.log(leaves);
     // console.log(newickData);
     // console.assert(newickData === "(A:0.1,B:0.2,(C:0.3,D:0.4)E:0.5):0.4;", function(){console.log(arguments)});
     
     //dendogram parse newick
-    return newick.parse(newickData);
+    return  {
+        tree: newick.parse(newickData),
+        leaves: leaves
+    }
+    
 }
 
 
@@ -178,7 +208,7 @@ function generateData(csvInfoFile, csvGensFile) {
     var infoData = readCSV(csvInfoFile);
     var gensData = readCSV(csvGensFile);
 
-    console.log(infoData);
+    // console.log(infoData);
     // console.log(gensData);
     
     var dataset = Array(ALG_QTY).fill().map(function (_, algIndex){
@@ -235,11 +265,19 @@ function main() {
     
     //normalize for PMX1
     var dendogramDataset = pmxDataset.map(function(item) {
-        return normalizeDataForDendogram(item);
+        return normalizeDataForDendogram(item).tree;
     });
 
     // console.log(dendogramDataset);
     writeJson(dendogramDataset, 'treeData.json');
+    
+    //normalize for PMX1
+    var leavesDataset = pmxDataset.map(function(item) {
+        return normalizeDataForDendogram(item).leaves;
+    });
+
+    // console.log(dendogramDataset);
+    writeJson(leavesDataset, 'leaves.json');
 }
 
 main();

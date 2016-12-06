@@ -4,6 +4,7 @@ var selectedAlgorithm = ['0', '1'];
 !function(){
     var dataset;
     var treeData;
+    var treeLeaves;
 
     function subscribeSelection (selectId, index) {
         var selElem = document.createElement('select');
@@ -89,7 +90,7 @@ var selectedAlgorithm = ['0', '1'];
 
         //
         var myDendogram = dendogramPlot(options.viewsContainer, options.dendogramId);
-        myDendogram.render(treeData[selectedAlgorithm]);
+        myDendogram.render(treeData[selectedAlgorithm], treeLeaves[selectedAlgorithm]);
 
         // var myTree = treePlot('tree1');
         // var treeData = myTree.normalizeData(dataset[selectedAlgorithm]);
@@ -110,14 +111,16 @@ var selectedAlgorithm = ['0', '1'];
         //#begin
         updateDataset([
             '../scripts/pmx.json',
-            '../scripts/treeData.json'
+            '../scripts/treeData.json',
+            '../scripts/leaves.json',
             ])
             .then(function(data){
                 
                 //
                 dataset = data[0];
                 treeData = data[1];
-                
+                treeLeaves = data[2];
+                console.log(data);
                 
                 //render
                 renderDataset(1);

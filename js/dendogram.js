@@ -1,6 +1,6 @@
 var dendogramPlot = function(viewsContainer, svgContainerId) {
   var timeout;
-  var outerRadius = 780 / 2,
+  var outerRadius = 760 / 2,
       innerRadius = outerRadius - 170;
 
   var color = d3.scaleOrdinal()
@@ -44,8 +44,9 @@ var dendogramPlot = function(viewsContainer, svgContainerId) {
   function moveToFront() {
     this.parentNode.appendChild(this);
   }
-  function render(data) {
-    drawLabels();
+
+  function render(data, leaves) {
+    drawLegends();
 
     var root = d3.hierarchy(data, function(d) { return d.branchset; });
     root
@@ -87,6 +88,7 @@ var dendogramPlot = function(viewsContainer, svgContainerId) {
         .attr("class", "labels")
       .selectAll("text")
         .data(nodes.filter(function(d) { return !d.children; }))
+    text
     .enter()
       .append("text")
       .attr('class', "label")
@@ -95,10 +97,19 @@ var dendogramPlot = function(viewsContainer, svgContainerId) {
       .attr("transform", function(d) { return "rotate(" + (d.x - 90) + ")translate(" + (innerRadius + 4) + ",0)" + (d.x < 180 ? "" : "rotate(180)"); })
       .style("text-anchor", function(d) { return d.x < 180 ? "start" : "end"; })
       .text(function(d) { 
-        return d.data.name.replace(/_/g, " "); 
+        console.log(leaves[d.data.name]);
+        // return d.data.name.replace(/_/g, " "); 
+        return leaves[d.data.name].config; 
       })
-      .on("mouseover", mouseovered(true))
-      .on("mouseout", mouseovered(false));
+      .on("mouseover", function(){ return mouseovered.call(this, true) })
+      .on("mouseout", function(){ return mouseovered.call(this, false) });
+    
+
+    text
+      .on("mouseover", function(){ return mouseovered.call(this, true) })
+      .on("mouseout", function(){ return mouseovered.call(this, false) });
+    
+
 
     d3.select(self.frameElement).style("height", outerRadius * 2 + "px");
     
@@ -140,8 +151,8 @@ var dendogramPlot = function(viewsContainer, svgContainerId) {
         + "L" + endRadius * c1 + "," + endRadius * s1;
   }
 
-  function drawLabels() {
-    svg.append('label')
+  function drawLegends() {
+    svg.append('legends')
       .attr("id", "show-length")
       .append("input")
       .attr("type", "checkbox")
