@@ -14,7 +14,7 @@ var selectedAlgorithm = ['0', '1'];
             optElem.setAttribute('value', i);
             optElem.textContent = name;
 
-            if (index === i){
+            if ((index-1) === i){
                 optElem.setAttribute('selected', true);
             }
             selElem.append(optElem);
@@ -26,9 +26,8 @@ var selectedAlgorithm = ['0', '1'];
         var menuElem = document.querySelector('.menu-select')
         menuElem.append(menuItem);
 
-
         selElem.addEventListener('change', function(e) {
-            selectedAlgorithm[index-1] = this.value;
+            selectedAlgorithm[index - 1] = this.value;
 
             document.getElementById('boxes' + index).remove();
             document.getElementById('bars' + index).remove();
@@ -75,6 +74,11 @@ var selectedAlgorithm = ['0', '1'];
        
         var options = getOptions(index);
         var selectedAlgorithm = getSelectedAlgorithm(index);
+        
+
+        var viewHeader = document.querySelector('#view'+index+' > h3');
+        viewHeader.textContent = algorithms[selectedAlgorithm].toUpperCase();
+
         //
         var mybars = barsPlot(options.viewsContainer, options.barsId);
         mybars.render(mybars.normalizeData(dataset[selectedAlgorithm]));

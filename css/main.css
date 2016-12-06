@@ -116,6 +116,10 @@ svg text {
     overflow: hidden;
 }
 
+.view > h3 {
+    text-align: center;
+}
+
 /*Dendogram Styles*/
 #show-length {
   position: absolute;

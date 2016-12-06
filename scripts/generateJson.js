@@ -226,8 +226,10 @@ function generateData(csvInfoFile, csvGensFile) {
 
 function main() {
 
-    var pmxDataset = generateData('../dados/pmx/info.csv', 
-                                '../dados/pmx/pmx.csv');
+    var pmxDataset = generateData(
+        '../dados/pmx/info.csv', 
+        '../dados/pmx/pmx.csv'
+    );
 
     writeJson(pmxDataset, 'pmx.json');
     

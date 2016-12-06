@@ -28,7 +28,9 @@ var boxPlots = function (viewsContainer, svgContainerId) {
         .attr('height', height)
         .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
-    var xAxisElem = svg
+
+    function render(dataset) {
+            var xAxisElem = svg
         .append('g')
         .attr('id', 'boxplot-axis-x')
         .attr('transform', 'translate(0,' + height + ')');
@@ -56,7 +58,7 @@ var boxPlots = function (viewsContainer, svgContainerId) {
         });
 
     xAxisElem.append('text')
-        .text('Testes #' + algorithms[selectedAlgorithm])
+        .text('Testes #' + algorithms[selectedAlgorithm[svgContainerId.slice(-1)-1]])
         .attrs({
             x: width/2 + 20,
             y: 20,
@@ -77,8 +79,6 @@ var boxPlots = function (viewsContainer, svgContainerId) {
         })
         .text('Variância do fitness');
 
-
-    function render(dataset) {
         //scales
         xScale = d3.scaleBand().rangeRound([0, width]).padding(0);
         xScale.domain(d3.range(dataset.length));

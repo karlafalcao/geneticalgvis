@@ -29,7 +29,7 @@ var dendogramPlot = function(viewsContainer, svgContainerId) {
       .attr("height", outerRadius * 2);
 
   var chart = svg.append("g")
-      .attr("transform", "translate(" + (outerRadius - 50) + "," + (outerRadius - 50) + ")");
+      .attr("transform", "translate(" + (outerRadius - 50) + "," + (outerRadius) + ")");
 
   function mouseovered(active) {
     var that = this;

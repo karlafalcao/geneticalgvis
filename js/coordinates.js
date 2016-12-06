@@ -1,5 +1,6 @@
 var coordinatesPlot = function (viewsContainer, svgContainerId) {
   var m = [30, 10, 10, 30],
+    width = document.body.clientWidth - m[1] - m[3],
     w = 1600 - m[1] - m[3],
     h = 300 - m[0] - m[2];
 
@@ -15,7 +16,7 @@ var coordinatesPlot = function (viewsContainer, svgContainerId) {
   var svg = d3.select(viewsContainer)
     .append("svg:svg")
     .attr('id', svgContainerId)
-    .attr("width", w + m[1] + m[3])
+    .attr("width", width + m[1] + m[3])
     .attr("height", h + m[0] + m[2])
     .append("svg:g")
     .attr("transform", "translate(" + m[3] + "," + m[0] + ")");

@@ -56,7 +56,7 @@ var barsPlot = function (viewsContainer, svgContainerId) {
     // overview
     var context = svg.append("g")
         .attr("class", "context")
-        .attr("transform", "translate(" + margin2.left + "," + margin2.top + ")");
+        .attr("transform", "translate(" + margin2.left + "," + (margin2.top+ 10) + ")");
 
     function normalizeData(data) {
         var teste1 = data[0];
@@ -188,7 +188,7 @@ var barsPlot = function (viewsContainer, svgContainerId) {
 
         context.append("g")
             .attr("class", "axis axis--x")
-            .attr("transform", "translate(0," + height2 + ")")
+            .attr("transform", "translate(0," + (height2) + ")")
             .call(xAxis2.tickValues([0,250,500,750,1000,1250,1500,1750,2000,2250])
 	            	.tickFormat(function (d,i){
 	            		return ["Teste "+(i+1)];
@@ -238,17 +238,17 @@ var barsPlot = function (viewsContainer, svgContainerId) {
 
         labels = svg.append('g')
             .attr('class', 'labels')
-            .attr('transform', 'translate('+ (width + margin.left + 10) + ' , 30)');
+            .attr('transform', 'translate('+ 250 + ' , '+ margin2.top +')');
 
         labels
             .append('text')
-            .text('Intervalo de fitness por cores')
+            .text('Fitness por cores')
             .attrs({
                 x: 0,
                 y: 0,
                 'font-size': '11px',
                 'font-weight': 'bold',
-                'transform': 'translate(0, -5)'
+                'transform': 'translate(-180, 0)'
             });
 
         var labelsGroup = labels.selectAll('g')
@@ -258,24 +258,34 @@ var barsPlot = function (viewsContainer, svgContainerId) {
         var labelsGroupAdd = labelsGroup
             .enter()
             .append('g')
-            .attr('class', 'line-group');
+            .attr('class', 'line-group')
+            .attr('transform', function (d, i, others) {
+                var position = i*90;
+                // if (i > 0) {
+                //     position = others[i-1].clientWidth;
+                // }
+                return 'translate(' +position+', 0)';
+            });
+                
 
         // Update
-        var labelsGroupUpdate = labelsGroup
-            .transition()
-            .duration(500);
+        // var labelsGroupUpdate = labelsGroup
+        //     .transition()
+        //     .duration(500);
 
-        labelsGroup
-            .exit()
-            .remove();
+        // labelsGroup
+        //     .exit()
+        //     .remove();
         
-        labelsGroupAdd
-            .append('rect')
+
+        labelsGroupAdd.append('rect')
             .attr('height', 10)
             .attr('width', 10)
-            .attr('y', function (d, i) {
-                return i * 17;
-            })
+            .attr('x', -15)
+            .attr('y', -9)
+            // .attr('x', function (d, i) {
+            //     return i * 100;
+            // })
             .attr('fill', function (d, i) {
                 return colour('count'+(i+1));
             });
@@ -286,12 +296,11 @@ var barsPlot = function (viewsContainer, svgContainerId) {
                 return d;
             })
             .attrs({
-                x: 12,
-                y: function (d, i) {
-                    return (i + 1) * 16;
-                },
+                // x: function (d, i) {
+                //     return (i + 1) * 100;
+                // },
                 'font-size': '11px',
-                'transform': 'translate(0, -5)'
+                // 'transform': 'translate(0, -5)'
             });
 
         // labelsGroupUpdate
