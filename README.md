@@ -1,8 +1,7 @@
-# Visualização da performance de Algoritmos Genéticos aplicados ao Problema das 8 Rainhas
+# 8 queens problem - genetic algorithm vixzualization
 
-##
 
 ## Authors
 
-* Helmiton Junior
+* @
 * Karla Falcao
