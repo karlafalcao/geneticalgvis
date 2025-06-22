@@ -135,11 +135,6 @@ var selectedAlgorithm = ['3', '6'];
                 renderDataset(1);
                 renderDataset(2);
 
-                // PCA
-                //pcaPlots.normalizedData(dataset);
-                //pcaPlots.init();
-                //pcaPlots.render();
-
                 var myCoordinate = coordinatesPlot('#main', 'coordinates');
                 var multidata = dataset[getSelectedAlgorithm(1)].concat(dataset[getSelectedAlgorithm(2)]);
                 myCoordinate.render(multidata);
